@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorld.Interfaces", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorld.Grains", "src\HelloWorld.Grains\HelloWorld.Grains.csproj", "{C8097F83-2D0E-4FFD-AEAE-AA075141289C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebAPI", "TestWebAPI\TestWebAPI.csproj", "{7F6091BF-B999-4B27-9E9D-35184F7BF5EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebAPI", "TestWebAPI\TestWebAPI.csproj", "{7F6091BF-B999-4B27-9E9D-35184F7BF5EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
