@@ -3,20 +3,32 @@ namespace TestWebAPI
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using HelloWorld.Interfaces;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Orleans;
+    using Orleans.Configuration;
+    using Orleans.Hosting;
     using Orleans.Runtime;
 
     public class ClusterClientHostedService : IHostedService
     {
         private readonly ILogger<ClusterClientHostedService> logger;
 
+        private static string AzureStorageConnectionString = "<replace_me>";
+
         public ClusterClientHostedService(ILogger<ClusterClientHostedService> logger, ILoggerProvider loggerProvider)
         {
             this.logger = logger;
+
             Client = new ClientBuilder()
-                .UseLocalhostClustering()
+                .UseAzureStorageClustering(c => c.ConnectionString = AzureStorageConnectionString)
+                .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IHello).Assembly))
+                .Configure<ClusterOptions>(c =>
+                {
+                    c.ClusterId = "dev";
+                    c.ServiceId = "HelloWorldApp";
+                })
                 .ConfigureLogging(builder => builder.AddProvider(loggerProvider))
                 .Build();
         }

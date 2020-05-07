@@ -11,7 +11,8 @@ services:
     depends_on: 
       - silo
     links:
-      - silo
+      - "silo"
+  
   silo:
     build:
       context: ./src

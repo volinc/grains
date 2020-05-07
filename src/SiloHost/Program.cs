@@ -12,18 +12,22 @@ namespace SiloHost
 
     public class Program
     {
+        private static string AzureStorageConnectionString = "<replace_me>";
+
         public static Task Main(string[] args) =>
             new HostBuilder()
                 .UseOrleans(builder =>
                 {
                     builder
-                        .UseLocalhostClustering()
+                        .UseAzureStorageClustering(c => c.ConnectionString = AzureStorageConnectionString)
+                        .ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000)
                         .Configure<ClusterOptions>(options =>
                         {
                             options.ClusterId = "dev";
                             options.ServiceId = "HelloWorldApp";
                         })
-                        .Configure<EndpointOptions>(options => options.AdvertisedIPAddress = IPAddress.Loopback)
+                        .Configure<EndpointOptions>(options =>
+                            options.AdvertisedIPAddress = Dns.GetHostAddresses("silo")[0])
                         .ConfigureApplicationParts(parts =>
                             parts.AddApplicationPart(typeof(HelloGrain).Assembly).WithReferences())
                         .AddMemoryGrainStorage("ArchiveStorage");
@@ -35,10 +39,7 @@ namespace SiloHost
                         options.SuppressStatusMessages = true;
                     });
                 })
-                .ConfigureLogging(builder =>
-                {
-                    builder.AddConsole();
-                })
+                .ConfigureLogging(builder => { builder.AddConsole(); })
                 .RunConsoleAsync();
     }
 }
