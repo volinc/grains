@@ -1,5 +1,6 @@
 namespace SiloHost
 {
+    using System;
     using System.Net;
     using System.Threading.Tasks;
     using HelloWorld.Grains;
@@ -12,14 +13,14 @@ namespace SiloHost
 
     public class Program
     {
-        private static string AzureStorageConnectionString = "<replace_me>";
-
         public static Task Main(string[] args) =>
             new HostBuilder()
                 .UseOrleans(builder =>
                 {
+                    var connectionString = Environment.GetEnvironmentVariable("CUSTOMCONNSTR_STORAGE_ACCOUNT");
+
                     builder
-                        .UseAzureStorageClustering(c => c.ConnectionString = AzureStorageConnectionString)
+                        .UseAzureStorageClustering(c => c.ConnectionString = connectionString)
                         .ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000)
                         .Configure<ClusterOptions>(options =>
                         {

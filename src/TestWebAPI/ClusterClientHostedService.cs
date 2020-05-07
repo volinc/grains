@@ -15,14 +15,12 @@ namespace TestWebAPI
     {
         private readonly ILogger<ClusterClientHostedService> logger;
 
-        private static string AzureStorageConnectionString = "<replace_me>";
-
-        public ClusterClientHostedService(ILogger<ClusterClientHostedService> logger, ILoggerProvider loggerProvider)
+        public ClusterClientHostedService(ILogger<ClusterClientHostedService> logger, ILoggerProvider loggerProvider, string connectionString)
         {
             this.logger = logger;
 
             Client = new ClientBuilder()
-                .UseAzureStorageClustering(c => c.ConnectionString = AzureStorageConnectionString)
+                .UseAzureStorageClustering(c => c.ConnectionString = connectionString)
                 .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IHello).Assembly))
                 .Configure<ClusterOptions>(c =>
                 {

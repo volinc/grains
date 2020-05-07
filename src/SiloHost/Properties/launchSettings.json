@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SiloHost": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "CUSTOMCONNSTR_STORAGE_ACCOUNT": "DefaultEndpointsProtocol=https;AccountName=taxysdevsa;AccountKey=ZcjkJzZxJYNr+s2K9F0esvFG7U8V84KqOft52Ajh92dbyjR86no71CAH8F0QSTLtgPkCQXqtY5RvX+JCenWiDQ==;EndpointSuffix=core.windows.net"
+      }
+    }
+  }
+}

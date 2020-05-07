@@ -22,7 +22,11 @@ namespace TestWebAPI
         {
             services.AddControllers();
             services.AddLogging(builder => builder.AddConsole());
-            services.AddSingleton<ClusterClientHostedService>();
+            services.AddSingleton(sp =>
+            {
+                var connectionString = Configuration.GetConnectionString("STORAGE_ACCOUNT");
+                return ActivatorUtilities.CreateInstance<ClusterClientHostedService>(sp, connectionString);
+            });
             services.AddSingleton<IHostedService>(_ => _.GetService<ClusterClientHostedService>());
             services.AddSingleton(_ => _.GetService<ClusterClientHostedService>().Client);
 
