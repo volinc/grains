@@ -15,7 +15,7 @@ namespace OrleansClient
         public ClusterClientHostedService(ILogger<ClusterClientHostedService> logger, ILoggerProvider loggerProvider)
         {
             this.logger = logger;
-            this.Client = new ClientBuilder()
+            Client = new ClientBuilder()
                 .UseLocalhostClustering()
                 .ConfigureLogging(builder => builder.AddProvider(loggerProvider))
                 .Build();
@@ -28,7 +28,7 @@ namespace OrleansClient
             var attempt = 0;
             var maxAttempts = 100;
             var delay = TimeSpan.FromSeconds(1);
-            return this.Client.Connect(async error =>
+            return Client.Connect(async error =>
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
@@ -37,7 +37,7 @@ namespace OrleansClient
 
                 if (++attempt < maxAttempts)
                 {
-                    this.logger.LogWarning(error,
+                    logger.LogWarning(error,
                         "Failed to connect to Orleans cluster on attempt {@Attempt} of {@MaxAttempts}.",
                         attempt, maxAttempts);
 
@@ -53,7 +53,7 @@ namespace OrleansClient
                     return true;
                 }
 
-                this.logger.LogError(error,
+                logger.LogError(error,
                     "Failed to connect to Orleans cluster on attempt {@Attempt} of {@MaxAttempts}.",
                     attempt, maxAttempts);
 
@@ -65,11 +65,11 @@ namespace OrleansClient
         {
             try
             {
-                await this.Client.Close();
+                await Client.Close();
             }
             catch (OrleansException error)
             {
-                this.logger.LogWarning(error,
+                logger.LogWarning(error,
                     "Error while gracefully disconnecting from Orleans cluster. Will ignore and continue to shutdown.");
             }
         }

@@ -20,7 +20,7 @@ namespace TestWebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<string> GetById(long id)
         {
-            var friend = this.clusterClient.GetGrain<IHello>(id);
+            var friend = clusterClient.GetGrain<IHello>(id);
             var response = await friend.SayHello("Test By ID");
             return response;
         }
@@ -28,7 +28,7 @@ namespace TestWebAPI.Controllers
         [HttpGet("{id}/{great}")]
         public async Task<string> GetPersistentById(long id, string great)
         {
-            var g = this.clusterClient.GetGrain<IHelloArchive>(id);
+            var g = clusterClient.GetGrain<IHelloArchive>(id);
             await g.SayHello(great);
 
             var greetings = await g.GetGreetings();

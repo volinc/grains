@@ -1,11 +1,22 @@
-version: '3.1'
+version: "3.3"
 
 services:
   test_app:
-    image: orleans-client
-    depends_on: 
-      - orleans-silo
-  orleans-silo:
-    image: orleans-silo
     build:
-      context: ./src/OrleansSilo/bin/PublishOutput/
+      context:  ./src
+      dockerfile: ./TestWebAPI/Dockerfile
+    image: test_app
+    ports:
+      - "5000:80"
+    depends_on: 
+      - silo
+    links:
+      - silo
+  silo:
+    build:
+      context: ./src
+      dockerfile: ./SiloHost/Dockerfile
+    image: silo
+    ports:
+      - "30000:30000"
+      - "11111:11111"

@@ -13,20 +13,20 @@ namespace HelloWorld.Grains
         public HelloArchiveGrain([PersistentState("archive", "ArchiveStorage")]
             IPersistentState<GreetingArchive> archive)
         {
-            this._archive = archive;
+            _archive = archive;
         }
 
         public async Task<string> SayHello(string greeting)
         {
-            this._archive.State.Greetings.Add(greeting);
+            _archive.State.Greetings.Add(greeting);
 
-            await this._archive.WriteStateAsync();
+            await _archive.WriteStateAsync();
 
             return $"You said: '{greeting}', I say: Hello!";
         }
 
         public Task<IEnumerable<string>> GetGreetings() =>
-            Task.FromResult<IEnumerable<string>>(this._archive.State.Greetings);
+            Task.FromResult<IEnumerable<string>>(_archive.State.Greetings);
     }
 
     public class GreetingArchive

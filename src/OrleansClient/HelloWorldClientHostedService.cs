@@ -14,18 +14,18 @@ namespace OrleansClient
 
         public HelloWorldClientHostedService(IClusterClient client)
         {
-            this._client = client;
+            _client = client;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             // example of calling grains from the initialized client
-            var friend = this._client.GetGrain<IHello>(0);
+            var friend = _client.GetGrain<IHello>(0);
             var response = await friend.SayHello("Good morning, my friend!");
             Console.WriteLine($"{response}");
 
             // example of calling IHelloArchive grqain that implements persistence
-            var g = this._client.GetGrain<IHelloArchive>(0);
+            var g = _client.GetGrain<IHelloArchive>(0);
             response = await g.SayHello("Good day!");
             Console.WriteLine($"{response}");
 
