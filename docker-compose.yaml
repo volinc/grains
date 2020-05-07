@@ -1,0 +1,11 @@
+version: '3.1'
+
+services:
+  test_app:
+    image: orleans-client
+    depends_on: 
+      - orleans-silo
+  orleans-silo:
+    image: orleans-silo
+    build:
+      context: ./src/OrleansSilo/bin/PublishOutput/
