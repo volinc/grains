@@ -20,18 +20,21 @@ namespace SiloHost
                     var connectionString = Environment.GetEnvironmentVariable("CUSTOMCONNSTR_STORAGE_ACCOUNT");
 
                     builder
-                        .UseAzureStorageClustering(c => c.ConnectionString = connectionString)
-                        .ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000)
+                        .UseLocalhostClustering()
+                        .UseInMemoryReminderService()
+                        //.UseAzureStorageClustering(c => c.ConnectionString = connectionString)
+                        //.ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000)
                         .Configure<ClusterOptions>(options =>
                         {
                             options.ClusterId = "dev";
                             options.ServiceId = "HelloWorldApp";
                         })
-                        .Configure<EndpointOptions>(options =>
-                            options.AdvertisedIPAddress = Dns.GetHostAddresses("silo")[0])
+                        //.Configure<EndpointOptions>(options =>
+                        //    options.AdvertisedIPAddress = Dns.GetHostAddresses("silo")[0])
                         .ConfigureApplicationParts(parts =>
                             parts.AddApplicationPart(typeof(HelloGrain).Assembly).WithReferences())
-                        .AddMemoryGrainStorage("ArchiveStorage");
+                        .AddMemoryGrainStorage("ArchiveStorage")
+                        .UseDashboard(options => { options.Port = 10000; });
                 })
                 .ConfigureServices(services =>
                 {

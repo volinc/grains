@@ -20,7 +20,8 @@ namespace TestWebAPI
             this.logger = logger;
 
             Client = new ClientBuilder()
-                .UseAzureStorageClustering(c => c.ConnectionString = connectionString)
+                .UseLocalhostClustering()
+                //.UseAzureStorageClustering(c => c.ConnectionString = connectionString)
                 .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IHello).Assembly))
                 .Configure<ClusterOptions>(c =>
                 {
