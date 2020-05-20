@@ -21,8 +21,13 @@ namespace TestWebAPI
         {
             this.logger = logger;
 
+            const string invariant = "System.Data.SqlClient";
             Client = new ClientBuilder()
-                .UseAdoNetClustering(options => options.ConnectionString = connectionString)                
+                .UseAdoNetClustering(options =>
+                {
+                    options.Invariant = invariant;
+                    options.ConnectionString = connectionString;
+                })                
                 .Configure<ClusterOptions>(options =>
                 {
                     options.ClusterId = "dev";

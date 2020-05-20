@@ -8,6 +8,7 @@ namespace Silo
     using Orleans;
     using Orleans.Configuration;
     using Orleans.Hosting;
+    using System.Net;
 
     public static class Program
     {
@@ -31,15 +32,30 @@ namespace Silo
                         //.UseInMemoryReminderService();                                                                
                     }
 
-                    var connectionString = context.Configuration.GetConnectionString("CUSTOMCONSTR_Clustering");
+                    const string invariant = "System.Data.SqlClient";
+                    var connectionString = context.Configuration.GetConnectionString("Clustering");
                     builder
-                        .UseAdoNetClustering(options => options.ConnectionString = connectionString)
-                        .UseAdoNetReminderService(options => options.ConnectionString = connectionString)
+                        .UseAdoNetClustering(options =>
+                        {
+                            options.Invariant = invariant;
+                            options.ConnectionString = connectionString;                             
+                        })                        
+                        .UseAdoNetReminderService(options =>
+                        {
+                            options.Invariant = invariant;
+                            options.ConnectionString = connectionString;
+                        })
+                        .Configure<EndpointOptions>(options =>
+                        {
+                            options.AdvertisedIPAddress = Dns.GetHostAddresses(Dns.GetHostName())[0];
+                            options.SiloPort = 11111;
+                            options.GatewayPort = 30000;
+                        })
                         .Configure<ClusterOptions>(options =>
                         {
                             options.ClusterId = "dev";
                             options.ServiceId = "Grains";
-                        })
+                        })                        
                         .ConfigureApplicationParts(parts =>
                         {
                             parts.AddApplicationPart(typeof(OrderGrain).Assembly).WithReferences();

@@ -3,9 +3,12 @@
     "Silo": {
       "commandName": "Project",
       "environmentVariables": {
-        "CUSTOMCONSTR_Clustering": "Server=sql; Database=taxys-local-db-dispatcher; User Id=sa; Password=12345(!)a;",
-        "DOTNET_ENVIRONMENT": "Development"
+        "DOTNET_ENVIRONMENT": "Development",
+        "CUSTOMCONNSTR_Clustering": "Server=sql; Database=taxys-local-db-dispatcher; User Id=sa; Password=12345(!)a;"
       }
+    },
+    "Docker": {
+      "commandName": "Docker"
     }
   }
 }

@@ -24,7 +24,7 @@ namespace TestWebAPI
             services.AddLogging(builder => builder.AddConsole());
             services.AddSingleton(sp =>
             {
-                var connectionString = Configuration.GetConnectionString("STORAGE_ACCOUNT");
+                var connectionString = Configuration.GetConnectionString("Clustering");
                 return ActivatorUtilities.CreateInstance<ClusterClientHostedService>(sp, connectionString);
             });
             services.AddSingleton<IHostedService>(_ => _.GetService<ClusterClientHostedService>());
