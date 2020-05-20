@@ -1,7 +1,7 @@
 namespace TestWebAPI.Controllers
 {
     using System.Threading.Tasks;
-    using HelloWorld.Interfaces;
+    using Grains.Interfaces;
     using Microsoft.AspNetCore.Mvc;
     using Orleans;
     using Orleans.Runtime;

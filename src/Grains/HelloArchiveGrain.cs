@@ -1,8 +1,8 @@
-namespace HelloWorld.Grains
+namespace Grains
 {
+    using Grains.Interfaces;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Interfaces;
     using Orleans;
     using Orleans.Runtime;
 
@@ -27,10 +27,5 @@ namespace HelloWorld.Grains
 
         public Task<IEnumerable<string>> GetGreetings() =>
             Task.FromResult<IEnumerable<string>>(_archive.State.Greetings);
-    }
-
-    public class GreetingArchive
-    {
-        public List<string> Greetings { get; } = new List<string>();
     }
 }

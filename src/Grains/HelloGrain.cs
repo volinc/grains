@@ -1,13 +1,10 @@
-namespace HelloWorld.Grains
+namespace Grains
 {
     using System.Threading.Tasks;
-    using Interfaces;
+    using Grains.Interfaces;
     using Microsoft.Extensions.Logging;
     using Orleans;
 
-    /// <summary>
-    ///     Orleans grain implementation class HelloGrain.
-    /// </summary>
     public class HelloGrain : Grain, IHello
     {
         private readonly ILogger logger;

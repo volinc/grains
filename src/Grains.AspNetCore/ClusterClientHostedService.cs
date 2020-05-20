@@ -1,22 +1,33 @@
-namespace OrleansClient
+namespace TestWebAPI
 {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using Grains.Interfaces;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Orleans;
+    using Orleans.Configuration;
+    using Orleans.Hosting;
     using Orleans.Runtime;
 
     public class ClusterClientHostedService : IHostedService
     {
         private readonly ILogger<ClusterClientHostedService> logger;
 
-        public ClusterClientHostedService(ILogger<ClusterClientHostedService> logger, ILoggerProvider loggerProvider)
+        public ClusterClientHostedService(ILogger<ClusterClientHostedService> logger, ILoggerProvider loggerProvider, string connectionString)
         {
             this.logger = logger;
+
             Client = new ClientBuilder()
                 .UseLocalhostClustering()
+                //.UseAzureStorageClustering(c => c.ConnectionString = connectionString)
+                .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IHello).Assembly))
+                .Configure<ClusterOptions>(c =>
+                {
+                    c.ClusterId = "dev";
+                    c.ServiceId = "HelloWorldApp";
+                })
                 .ConfigureLogging(builder => builder.AddProvider(loggerProvider))
                 .Build();
         }

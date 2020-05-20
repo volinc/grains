@@ -1,9 +1,8 @@
-namespace SiloHost
+namespace Silo
 {
-    using System;
-    using System.Net;
     using System.Threading.Tasks;
-    using HelloWorld.Grains;
+    using Grains;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
@@ -11,14 +10,14 @@ namespace SiloHost
     using Orleans.Configuration;
     using Orleans.Hosting;
 
-    public class Program
+    public static class Program
     {
         public static Task Main(string[] args) =>
-            new HostBuilder()
-                .UseOrleans(builder =>
+            Host.CreateDefaultBuilder()
+                .UseOrleans((context, builder) =>
                 {
-                    var connectionString = Environment.GetEnvironmentVariable("CUSTOMCONNSTR_STORAGE_ACCOUNT");
-
+                    var connectionString = context.Configuration.GetConnectionString("STORAGE_ACCOUNT");
+                    
                     builder
                         .UseLocalhostClustering()
                         .UseInMemoryReminderService()
