@@ -13,15 +13,16 @@ namespace TestWebAPI
 
     public class ClusterClientHostedService : IHostedService
     {
-        private readonly ILogger<ClusterClientHostedService> logger;
+        private static readonly string invariant = "System.Data.SqlClient";
 
+        private readonly ILogger<ClusterClientHostedService> logger;
+        
         public ClusterClientHostedService(ILogger<ClusterClientHostedService> logger, 
                                           ILoggerProvider loggerProvider, 
                                           string connectionString)
         {
             this.logger = logger;
-
-            const string invariant = "System.Data.SqlClient";
+            
             Client = new ClientBuilder()
                 .UseAdoNetClustering(options =>
                 {

@@ -12,6 +12,8 @@ namespace Silo
 
     public static class Program
     {
+        private static readonly string invariant = "System.Data.SqlClient";
+
         public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -31,8 +33,7 @@ namespace Silo
                         //builder//.UseLocalhostClustering()
                         //.UseInMemoryReminderService();                                                                
                     }
-
-                    const string invariant = "System.Data.SqlClient";
+                    
                     var connectionString = context.Configuration.GetConnectionString("Clustering");
                     builder
                         .UseAdoNetClustering(options =>
