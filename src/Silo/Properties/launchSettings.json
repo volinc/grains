@@ -1,9 +1,10 @@
 {
   "profiles": {
-    "SiloHost": {
+    "Silo": {
       "commandName": "Project",
       "environmentVariables": {
-        "CUSTOMCONNSTR_STORAGE_ACCOUNT": "DefaultEndpointsProtocol=https;AccountName=taxysdevsa;AccountKey=ZcjkJzZxJYNr+s2K9F0esvFG7U8V84KqOft52Ajh92dbyjR86no71CAH8F0QSTLtgPkCQXqtY5RvX+JCenWiDQ==;EndpointSuffix=core.windows.net"
+        "CUSTOMCONSTR_Clustering": "Server=sql; Database=taxys-local-db-dispatcher; User Id=sa; Password=12345(!)a;",
+        "DOTNET_ENVIRONMENT": "Development"
       }
     }
   }

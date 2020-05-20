@@ -15,19 +15,20 @@ namespace TestWebAPI
     {
         private readonly ILogger<ClusterClientHostedService> logger;
 
-        public ClusterClientHostedService(ILogger<ClusterClientHostedService> logger, ILoggerProvider loggerProvider, string connectionString)
+        public ClusterClientHostedService(ILogger<ClusterClientHostedService> logger, 
+                                          ILoggerProvider loggerProvider, 
+                                          string connectionString)
         {
             this.logger = logger;
 
             Client = new ClientBuilder()
-                .UseLocalhostClustering()
-                //.UseAzureStorageClustering(c => c.ConnectionString = connectionString)
-                .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IHello).Assembly))
-                .Configure<ClusterOptions>(c =>
+                .UseAdoNetClustering(options => options.ConnectionString = connectionString)                
+                .Configure<ClusterOptions>(options =>
                 {
-                    c.ClusterId = "dev";
-                    c.ServiceId = "HelloWorldApp";
+                    options.ClusterId = "dev";
+                    options.ServiceId = "Grains";
                 })
+                .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IOrder).Assembly))
                 .ConfigureLogging(builder => builder.AddProvider(loggerProvider))
                 .Build();
         }
@@ -39,6 +40,7 @@ namespace TestWebAPI
             var attempt = 0;
             var maxAttempts = 100;
             var delay = TimeSpan.FromSeconds(1);
+
             return Client.Connect(async error =>
             {
                 if (cancellationToken.IsCancellationRequested)

@@ -1,6 +1,5 @@
 namespace Silo
 {
-    using System.Threading.Tasks;
     using Grains;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -12,37 +11,40 @@ namespace Silo
 
     public static class Program
     {
-        public static Task Main(string[] args) =>
-            Host.CreateDefaultBuilder()
-                .UseOrleans((context, builder) =>
-                {
-                    var connectionString = context.Configuration.GetConnectionString("STORAGE_ACCOUNT");
-                    
-                    builder
-                        .UseLocalhostClustering()
-                        .UseInMemoryReminderService()
-                        //.UseAzureStorageClustering(c => c.ConnectionString = connectionString)
-                        //.ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000)
-                        .Configure<ClusterOptions>(options =>
-                        {
-                            options.ClusterId = "dev";
-                            options.ServiceId = "HelloWorldApp";
-                        })
-                        //.Configure<EndpointOptions>(options =>
-                        //    options.AdvertisedIPAddress = Dns.GetHostAddresses("silo")[0])
-                        .ConfigureApplicationParts(parts =>
-                            parts.AddApplicationPart(typeof(HelloGrain).Assembly).WithReferences())
-                        .AddMemoryGrainStorage("ArchiveStorage")
-                        .UseDashboard(options => { options.Port = 10000; });
-                })
-                .ConfigureServices(services =>
+        public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
+
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureServices((context, services) =>
                 {
                     services.Configure<ConsoleLifetimeOptions>(options =>
                     {
                         options.SuppressStatusMessages = true;
                     });
                 })
-                .ConfigureLogging(builder => { builder.AddConsole(); })
-                .RunConsoleAsync();
+                .ConfigureLogging((context, builder) => { builder.AddConsole(); })
+                .UseOrleans((context, builder) =>
+                {
+                    if (context.HostingEnvironment.IsDevelopment())
+                    {
+                        //builder//.UseLocalhostClustering()
+                        //.UseInMemoryReminderService();                                                                
+                    }
+
+                    var connectionString = context.Configuration.GetConnectionString("CUSTOMCONSTR_Clustering");
+                    builder
+                        .UseAdoNetClustering(options => options.ConnectionString = connectionString)
+                        .UseAdoNetReminderService(options => options.ConnectionString = connectionString)
+                        .Configure<ClusterOptions>(options =>
+                        {
+                            options.ClusterId = "dev";
+                            options.ServiceId = "Grains";
+                        })
+                        .ConfigureApplicationParts(parts =>
+                        {
+                            parts.AddApplicationPart(typeof(OrderGrain).Assembly).WithReferences();
+                        })
+                        .UseDashboard(options => { options.Port = 10000; });
+                });
     }
 }
