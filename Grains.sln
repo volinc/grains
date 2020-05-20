@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grains.Interfaces", "src\Gr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grains", "src\Grains\Grains.csproj", "{C8097F83-2D0E-4FFD-AEAE-AA075141289C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grains.AspNetCore", "src\Grains.AspNetCore\Grains.AspNetCore.csproj", "{7F6091BF-B999-4B27-9E9D-35184F7BF5EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silo.Client", "src\Silo.Client\Silo.Client.csproj", "{6BF165A8-6CAA-44A8-A8BA-C4EF3274F677}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{C8097F83-2D0E-4FFD-AEAE-AA075141289C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8097F83-2D0E-4FFD-AEAE-AA075141289C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8097F83-2D0E-4FFD-AEAE-AA075141289C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F6091BF-B999-4B27-9E9D-35184F7BF5EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F6091BF-B999-4B27-9E9D-35184F7BF5EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F6091BF-B999-4B27-9E9D-35184F7BF5EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F6091BF-B999-4B27-9E9D-35184F7BF5EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BF165A8-6CAA-44A8-A8BA-C4EF3274F677}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BF165A8-6CAA-44A8-A8BA-C4EF3274F677}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BF165A8-6CAA-44A8-A8BA-C4EF3274F677}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BF165A8-6CAA-44A8-A8BA-C4EF3274F677}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
