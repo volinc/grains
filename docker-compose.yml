@@ -26,15 +26,13 @@ services:
       - sql
     env_file:
       - OrleansHost/orleanshost.local.env
+    restart: on-failure
     ports:
       - "11111:11111"
       - "30000:30000"
       - "12000:12000"
-    restart: on-failure
     networks:
-      backend:
-       aliases:
-         - orleanshost
+      - backend
   
   sql:
     image: "mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04"
