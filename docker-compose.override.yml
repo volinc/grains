@@ -5,8 +5,4 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "80"
-  
-  orleanshost:
-    environment:
-      - DOTNET_ENVIRONMENT=Development
+      - "80"  

@@ -3,11 +3,11 @@
   "profiles": {
     "OrleansClient": {
       "commandName": "Project",
-      "launchBrowser": true,
       "environmentVariables": {
-        "CUSTOMCONNSTR_Clustering": "Server=sql; Database=grains; User Id=sa; Password=12345(!)a;",
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CUSTOMCONNSTR_Clustering": "Server=sql; Database=grains; User Id=sa; Password=12345(!)a;"
       },
+      "launchBrowser": true,
       "applicationUrl": "http://localhost:5000/swagger"
     },
     "Docker": {

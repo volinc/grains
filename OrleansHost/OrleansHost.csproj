@@ -1,11 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">  
+  
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>    
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>    
     <ServerGarbageCollection>true</ServerGarbageCollection>    
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>    
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <RootNamespace>OrleansHost</RootNamespace>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.4" />
@@ -17,11 +20,10 @@
     <PackageReference Include="OrleansDashboard" Version="3.1.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
   </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\Grains\Grains.csproj" />
     <ProjectReference Include="..\Grains.Interfaces\Grains.Interfaces.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+
 </Project>

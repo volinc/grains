@@ -5,18 +5,10 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ServerGarbageCollection>true</ServerGarbageCollection>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <RootNamespace>Silo.Client</RootNamespace>    
+    <RootNamespace>OrleansClient</RootNamespace>    
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'OrleansClient' ">
-    <StartAction>Project</StartAction>
-    <EnvironmentVariables>
-      <Variable name="CUSTOMCONNSTR_Clustering" value="Server=sql; Database=grains; User Id=sa; Password=12345(!)a;" />
-      <Variable name="ASPNETCORE_ENVIRONMENT" value="Development" />
-    </EnvironmentVariables>
-    <ApplicationURL>http://localhost:5000/swagger</ApplicationURL>
-  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Microsoft.Orleans.Client" Version="3.1.7" />
     <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="3.1.7" />

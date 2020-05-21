@@ -10,32 +10,14 @@ services:
       - OrleansClient/orleansclient.local.env
     depends_on:
       - sql
-      - orleanshost
     restart: on-failure
     ports:
       - "5000:80"
     networks:
       - backend
-
-  orleanshost:
-    image: ${DOCKER_REGISTRY-}host
-    build:
-      context: .
-      dockerfile: OrleansHost/Dockerfile
-    depends_on:
-      - sql
-    env_file:
-      - OrleansHost/orleanshost.local.env
-    restart: on-failure
-    ports:
-      - "11111:11111"
-      - "30000:30000"
-      - "12000:12000"
-    networks:
-      - backend
-  
+          
   sql:
-    image: "mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04"
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
     hostname: "sql"
     environment:
       - ACCEPT_EULA=Y
