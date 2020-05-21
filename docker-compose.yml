@@ -1,0 +1,56 @@
+version: '3.4'
+
+services:
+  silo:
+    image: ${DOCKER_REGISTRY-}silo
+    build:
+      context: .
+      dockerfile: src/Silo/Dockerfile
+    env_file:
+      - src/Silo/silo.local.env
+    ports:
+        - "11111:11111"
+        - "30000:30000"
+        - "12000:12000"
+    restart: on-failure
+    networks:
+        backend:
+        aliases:
+        - silo
+
+  silo.client:
+    image: ${DOCKER_REGISTRY-}siloclient
+    build:
+      context: .
+      dockerfile: src/Silo.Client/Dockerfile
+    env_file:
+      - src/Silo.Client/client.local.env
+    depends_on:
+      - sql
+      - silo
+    restart: on-failure
+    ports:
+      - "5000:80"
+    networks:
+     - backend
+
+  sql:
+    image: "mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04"
+    hostname: "sql"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=12345(!)a
+    volumes:
+      - sqlvolume:/var/opt/mssql
+    ports:
+      - "1433:1433"
+    networks:
+      - backend
+    aliases:
+      - sql
+   
+   volumes:
+     sqlvolume:
+
+   networks:
+     backend:

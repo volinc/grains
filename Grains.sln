@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grains", "src\Grains\Grains
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silo.Client", "src\Silo.Client\Silo.Client.csproj", "{6BF165A8-6CAA-44A8-A8BA-C4EF3274F677}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{537FB303-CF81-4D7D-B222-934A130B0335}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{6BF165A8-6CAA-44A8-A8BA-C4EF3274F677}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BF165A8-6CAA-44A8-A8BA-C4EF3274F677}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BF165A8-6CAA-44A8-A8BA-C4EF3274F677}.Release|Any CPU.Build.0 = Release|Any CPU
+		{537FB303-CF81-4D7D-B222-934A130B0335}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{537FB303-CF81-4D7D-B222-934A130B0335}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{537FB303-CF81-4D7D-B222-934A130B0335}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{537FB303-CF81-4D7D-B222-934A130B0335}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
