@@ -35,10 +35,15 @@ namespace Silo
                     
                     var connectionString = context.Configuration.GetConnectionString("Clustering");
                     builder
+                        .Configure<ClusterOptions>(options =>
+                        {
+                            options.ClusterId = "devCluster";
+                            options.ServiceId = "devService";                            
+                        })
                         .AddAdoNetGrainStorage("grains", options =>
                         {
                             options.Invariant = invariant;
-                            options.ConnectionString = connectionString;
+                            options.ConnectionString = connectionString;                            
                         })
                         .UseAdoNetClustering(options =>
                         {
@@ -52,15 +57,10 @@ namespace Silo
                         })
                         //.Configure<EndpointOptions>(options =>
                         //{
-                        //    options.AdvertisedIPAddress = Dns.GetHostAddresses(Dns.GetHostName())[0];
+                        //    options.AdvertisedIPAddress = IPAddress.Loopback; //Dns.GetHostAddresses(Dns.GetHostName())[0];
                         //    options.SiloPort = 11111;
                         //    options.GatewayPort = 30000;
                         //})
-                        .Configure<ClusterOptions>(options =>
-                        {
-                            options.ClusterId = "dev";
-                            options.ServiceId = "Grains";
-                        })                        
                         .ConfigureApplicationParts(parts =>
                         {
                             parts.AddApplicationPart(typeof(OrderGrain).Assembly).WithReferences();

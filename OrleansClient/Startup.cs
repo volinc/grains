@@ -29,17 +29,18 @@ namespace TestWebAPI
             services.AddSingleton(sp =>
             {                
                 var clientBuilder = new ClientBuilder();
-                
-                clientBuilder.UseAdoNetClustering(options =>
-                {
-                    options.Invariant = "System.Data.SqlClient";                    
-                    options.ConnectionString = Configuration.GetConnectionString("Clustering");
-                })
+
+                clientBuilder
                 .Configure<ClusterOptions>(options =>
                 {
-                    options.ClusterId = "dev";
-                    options.ServiceId = "Grains";
+                    options.ClusterId = "devCluster";
+                    options.ServiceId = "devService";
                 })
+                .UseAdoNetClustering(options =>
+                {
+                    options.Invariant = "System.Data.SqlClient";                    
+                    options.ConnectionString = Configuration.GetConnectionString("Clustering");                    
+                })                
                 .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IOrder).Assembly))
                 .ConfigureLogging(builder =>
                 {
