@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Silo": {
+    "OrleansHost": {
       "commandName": "Project",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
