@@ -27,6 +27,7 @@ services:
       - OrleansHost/orleanshost.local.env
     restart: on-failure
     ports:
+      - "10000:10000"
       - "11111:11111"
       - "30000:30000"
       - "12000:12000"

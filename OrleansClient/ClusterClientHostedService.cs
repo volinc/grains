@@ -2,44 +2,23 @@ namespace TestWebAPI
 {
     using System;
     using System.Threading;
-    using System.Threading.Tasks;
-    using Grains.Interfaces;
+    using System.Threading.Tasks;    
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Orleans;
-    using Orleans.Configuration;
-    using Orleans.Hosting;
     using Orleans.Runtime;
 
     public class ClusterClientHostedService : IHostedService
     {
-        private static readonly string invariant = "System.Data.SqlClient";
-
+        private readonly IClusterClient clusterClient;
         private readonly ILogger<ClusterClientHostedService> logger;
         
-        public ClusterClientHostedService(ILogger<ClusterClientHostedService> logger, 
-                                          ILoggerProvider loggerProvider, 
-                                          string connectionString)
+        public ClusterClientHostedService(IClusterClient clusterClient, 
+                                          ILogger<ClusterClientHostedService> logger)
         {
+            this.clusterClient = clusterClient;
             this.logger = logger;
-            
-            Client = new ClientBuilder()                
-                .UseAdoNetClustering(options =>
-                {
-                    options.Invariant = invariant;
-                    options.ConnectionString = connectionString;
-                })                
-                .Configure<ClusterOptions>(options =>
-                {
-                    options.ClusterId = "dev";
-                    options.ServiceId = "Grains";
-                })
-                .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IOrder).Assembly))
-                .ConfigureLogging(builder => builder.AddProvider(loggerProvider))
-                .Build();
         }
-
-        public IClusterClient Client { get; }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -47,7 +26,7 @@ namespace TestWebAPI
             var maxAttempts = 100;
             var delay = TimeSpan.FromSeconds(1);
 
-            return Client.Connect(async error =>
+            return clusterClient.Connect(async error =>
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
@@ -84,7 +63,7 @@ namespace TestWebAPI
         {
             try
             {
-                await Client.Close();
+                await clusterClient.Close();
             }
             catch (OrleansException error)
             {

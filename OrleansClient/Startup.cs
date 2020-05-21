@@ -1,5 +1,6 @@
 namespace TestWebAPI
 {
+    using Grains.Interfaces;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -7,6 +8,9 @@ namespace TestWebAPI
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Microsoft.OpenApi.Models;
+    using Orleans;
+    using Orleans.Configuration;
+    using Orleans.Hosting;
 
     public class Startup
     {
@@ -23,13 +27,31 @@ namespace TestWebAPI
             services.AddControllers();
             services.AddLogging(builder => builder.AddConsole());
             services.AddSingleton(sp =>
-            {
-                var connectionString = Configuration.GetConnectionString("Clustering");
-                return ActivatorUtilities.CreateInstance<ClusterClientHostedService>(sp, connectionString);
-            });
-            services.AddSingleton<IHostedService>(_ => _.GetService<ClusterClientHostedService>());
-            services.AddSingleton(_ => _.GetService<ClusterClientHostedService>().Client);
+            {                
+                var clientBuilder = new ClientBuilder();
+                
+                clientBuilder.UseAdoNetClustering(options =>
+                {
+                    options.Invariant = "System.Data.SqlClient";                    
+                    options.ConnectionString = Configuration.GetConnectionString("Clustering");
+                })
+                .Configure<ClusterOptions>(options =>
+                {
+                    options.ClusterId = "dev";
+                    options.ServiceId = "Grains";
+                })
+                .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IOrder).Assembly))
+                .ConfigureLogging(builder =>
+                {
+                    var loggerProvider = sp.GetRequiredService<ILoggerProvider>();
+                    builder.AddProvider(loggerProvider);
+                });
 
+                return clientBuilder.Build();
+            });
+            services.AddSingleton<ClusterClientHostedService>();
+            services.AddSingleton<IHostedService>(_ => _.GetService<ClusterClientHostedService>());
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Test API", Version = "v1" });

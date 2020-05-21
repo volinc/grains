@@ -8,7 +8,6 @@ namespace Silo
     using Orleans;
     using Orleans.Configuration;
     using Orleans.Hosting;
-    using System.Net;
 
     public static class Program
     {
@@ -36,11 +35,10 @@ namespace Silo
                     
                     var connectionString = context.Configuration.GetConnectionString("Clustering");
                     builder
-                        .AddAdoNetGrainStorageAsDefault(options =>
+                        .AddAdoNetGrainStorage("grains", options =>
                         {
                             options.Invariant = invariant;
                             options.ConnectionString = connectionString;
-                            options.UseJsonFormat = true;
                         })
                         .UseAdoNetClustering(options =>
                         {
@@ -52,12 +50,12 @@ namespace Silo
                             options.Invariant = invariant;
                             options.ConnectionString = connectionString;                            
                         })
-                        .Configure<EndpointOptions>(options =>
-                        {
-                            options.AdvertisedIPAddress = Dns.GetHostAddresses(Dns.GetHostName())[0];
-                            options.SiloPort = 11111;
-                            options.GatewayPort = 30000;
-                        })
+                        //.Configure<EndpointOptions>(options =>
+                        //{
+                        //    options.AdvertisedIPAddress = Dns.GetHostAddresses(Dns.GetHostName())[0];
+                        //    options.SiloPort = 11111;
+                        //    options.GatewayPort = 30000;
+                        //})
                         .Configure<ClusterOptions>(options =>
                         {
                             options.ClusterId = "dev";
