@@ -36,15 +36,21 @@ namespace Silo
                     
                     var connectionString = context.Configuration.GetConnectionString("Clustering");
                     builder
+                        .AddAdoNetGrainStorageAsDefault(options =>
+                        {
+                            options.Invariant = invariant;
+                            options.ConnectionString = connectionString;
+                            options.UseJsonFormat = true;
+                        })
                         .UseAdoNetClustering(options =>
                         {
                             options.Invariant = invariant;
-                            options.ConnectionString = connectionString;                             
+                            options.ConnectionString = connectionString;                            
                         })                        
                         .UseAdoNetReminderService(options =>
                         {
                             options.Invariant = invariant;
-                            options.ConnectionString = connectionString;
+                            options.ConnectionString = connectionString;                            
                         })
                         .Configure<EndpointOptions>(options =>
                         {

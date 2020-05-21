@@ -23,7 +23,7 @@ namespace TestWebAPI
         {
             this.logger = logger;
             
-            Client = new ClientBuilder()
+            Client = new ClientBuilder()                
                 .UseAdoNetClustering(options =>
                 {
                     options.Invariant = invariant;
