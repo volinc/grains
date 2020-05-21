@@ -15,6 +15,10 @@
       "commandName": "Docker",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "environmentVariables": {
+        "CUSTOMCONNSTR_Clustering": "Server=sql; Database=grains; User Id=sa; Password=12345(!)a;",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
       "publishAllPorts": true
     }
   }
