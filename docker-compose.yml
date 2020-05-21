@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: src/Silo/Dockerfile
+    depends_on:
+      - sql
     env_file:
       - src/Silo/silo.local.env
     ports:
@@ -45,6 +47,11 @@ services:
     ports:
       - "1433:1433"
     networks:
-      backend:
+      - backend
     aliases:
-      - sql  
+      - sql
+
+volumes:
+  sqlvolume:
+networks:
+  backend:
