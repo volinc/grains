@@ -7,7 +7,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["OrleansHost/OrleansHost.csproj", "OrleansHost/"]
 COPY ["Grains.Interfaces/Grains.Interfaces.csproj", "Grains.Interfaces/"]
-COPY ./nuget.config .
+COPY ["Grains/Grains.csproj", "Grains/"]
 RUN dotnet restore "OrleansHost/OrleansHost.csproj"
 COPY . .
 WORKDIR "/src/OrleansHost"
