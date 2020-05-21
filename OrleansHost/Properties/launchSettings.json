@@ -9,9 +9,6 @@
     },
     "Docker": {
       "commandName": "Docker"
-    },
-    "Azure Dev Spaces": {
-      "commandName": "AzureDevSpaces"
-    }
+    }    
   }
 }

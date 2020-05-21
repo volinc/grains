@@ -6,7 +6,7 @@
     <ProjectGuid>537fb303-cf81-4d7d-b222-934a130b0335</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>silo.client</DockerServiceName>
+    <DockerServiceName>orleansclient</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">
