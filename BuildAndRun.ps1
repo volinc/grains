@@ -17,6 +17,6 @@ if ($LastExitCode -ne 0) { return; }
 
 # Run the 2 console apps in different windows
 
-Start-Process "dotnet" -ArgumentList "run --project src/SiloHost --no-build"
+Start-Process "dotnet" -ArgumentList "run --project OrleansHost --no-build"
 Start-Sleep 10
-Start-Process "dotnet" -ArgumentList "run --project src/OrleansClient --no-build"
+Start-Process "dotnet" -ArgumentList "run --project OrleansClient --no-build"
