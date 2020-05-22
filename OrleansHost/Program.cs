@@ -61,7 +61,7 @@ namespace Silo
                         {
                             parts.AddApplicationPart(typeof(OrderGrain).Assembly).WithReferences();
                         })
-                        .UseDashboard(options => { options.Port = 10000; });
+                        //.UseDashboard(options => { options.Port = 10000; });
                 });
     }
 }

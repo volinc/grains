@@ -15,13 +15,10 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.4" />
     <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="3.1.7" />
-    <PackageReference Include="Microsoft.Orleans.OrleansSQLUtils" Version="2.4.5" />
     <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.1.7" />
     <PackageReference Include="Microsoft.Orleans.Reminders.AdoNet" Version="3.1.7" />
     <PackageReference Include="Microsoft.Orleans.Server" Version="3.1.7" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
-    <PackageReference Include="OrleansDashboard" Version="3.1.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />        
   </ItemGroup>
   
   <ItemGroup>
