@@ -1,4 +1,4 @@
-namespace TestWebAPI
+namespace OrleansClient
 {
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;

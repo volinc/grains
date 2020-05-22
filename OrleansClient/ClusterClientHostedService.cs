@@ -1,8 +1,8 @@
-namespace TestWebAPI
+namespace OrleansClient
 {
     using System;
     using System.Threading;
-    using System.Threading.Tasks;    
+    using System.Threading.Tasks;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Orleans;

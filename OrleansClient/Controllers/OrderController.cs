@@ -1,11 +1,11 @@
-namespace TestWebAPI.Controllers
+namespace OrleansClient.Controllers
 {
     using System;
     using System.Threading.Tasks;
     using Grains.Interfaces;
     using Microsoft.AspNetCore.Mvc;
     using Orleans;
-    
+
     [Route("orders")]
     [ApiController]
     public class OrderController : ControllerBase

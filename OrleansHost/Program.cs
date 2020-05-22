@@ -1,4 +1,4 @@
-namespace Silo
+namespace OrleansHost
 {
     using Grains;
     using Grains.Interfaces;

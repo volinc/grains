@@ -1,4 +1,4 @@
-namespace TestWebAPI
+namespace OrleansClient
 {
     using Grains.Interfaces;
     using Microsoft.AspNetCore.Builder;
