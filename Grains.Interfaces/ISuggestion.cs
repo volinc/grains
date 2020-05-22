@@ -1,8 +1,8 @@
-﻿namespace Grains.Interfaces
-{
-    using Orleans;
-    using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Orleans;
 
+namespace Grains.Interfaces
+{
     public interface ISuggestion : IGrainWithGuidKey
     {
         Task AcceptAsync();

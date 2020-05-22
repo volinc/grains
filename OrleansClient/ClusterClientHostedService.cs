@@ -1,20 +1,20 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Orleans;
+using Orleans.Runtime;
+
 namespace OrleansClient
 {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
-    using Orleans;
-    using Orleans.Runtime;
-
     public class ClusterClientHostedService : IHostedService
     {
         private readonly IClusterClient clusterClient;
         private readonly ILogger<ClusterClientHostedService> logger;
-        
-        public ClusterClientHostedService(IClusterClient clusterClient, 
-                                          ILogger<ClusterClientHostedService> logger)
+
+        public ClusterClientHostedService(IClusterClient clusterClient,
+            ILogger<ClusterClientHostedService> logger)
         {
             this.clusterClient = clusterClient;
             this.logger = logger;
@@ -28,10 +28,7 @@ namespace OrleansClient
 
             return clusterClient.Connect(async error =>
             {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    return false;
-                }
+                if (cancellationToken.IsCancellationRequested) return false;
 
                 if (++attempt < maxAttempts)
                 {

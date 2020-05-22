@@ -1,11 +1,11 @@
+using System;
+using System.Threading.Tasks;
+using Grains.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Orleans;
+
 namespace OrleansClient.Controllers
 {
-    using System;
-    using System.Threading.Tasks;
-    using Grains.Interfaces;
-    using Microsoft.AspNetCore.Mvc;
-    using Orleans;
-
     [Route("orders")]
     [ApiController]
     public class OrderController : ControllerBase
@@ -28,7 +28,7 @@ namespace OrleansClient.Controllers
         public async Task ConfirmAsync(Guid id)
         {
             var order = clusterClient.GetGrain<IOrder>(id);
-            await order.StartSearchAsync();            
+            await order.StartSearchAsync();
         }
 
         [HttpPost("{id}/cancel")]

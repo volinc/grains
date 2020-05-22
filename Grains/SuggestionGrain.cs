@@ -1,10 +1,11 @@
+using System;
+using System.Threading.Tasks;
+using Grains.Interfaces;
+using Microsoft.Extensions.Logging;
+using Orleans;
+
 namespace Grains
 {
-    using System.Threading.Tasks;
-    using Grains.Interfaces;
-    using Microsoft.Extensions.Logging;
-    using Orleans;
-
     public class SuggestionGrain : Grain, ISuggestion
     {
         private readonly ILogger logger;
@@ -16,12 +17,12 @@ namespace Grains
 
         public Task AcceptAsync()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Task DeclineAsync()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

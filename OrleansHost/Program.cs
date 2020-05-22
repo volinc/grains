@@ -1,21 +1,25 @@
+using Grains;
+using Grains.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Orleans;
+using Orleans.Configuration;
+using Orleans.Hosting;
+
 namespace OrleansHost
 {
-    using Grains;
-    using Grains.Interfaces;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
-    using Orleans;
-    using Orleans.Configuration;
-    using Orleans.Hosting;
-
     public static class Program
     {
-        public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
 
-        private static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        private static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
                 {
                     services.Configure<ConsoleLifetimeOptions>(options =>
@@ -25,15 +29,12 @@ namespace OrleansHost
                 })
                 .ConfigureLogging((context, builder) =>
                 {
-                    if (context.HostingEnvironment.IsDevelopment())
-                    {
-                        builder.AddDebug();
-                    }
+                    if (context.HostingEnvironment.IsDevelopment()) builder.AddDebug();
 
                     builder.AddConsole();
                 })
                 .UseOrleans((context, builder) =>
-                {                    
+                {
                     var connectionString = context.Configuration.GetConnectionString("Clustering");
                     builder
                         .Configure<ClusterOptions>(options =>
@@ -57,11 +58,12 @@ namespace OrleansHost
                             options.Invariant = Constants.Invariant;
                             options.ConnectionString = connectionString;
                         })
-                        .ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000)
+                        .ConfigureEndpoints(11111, 30000)
                         .ConfigureApplicationParts(parts =>
                         {
                             parts.AddApplicationPart(typeof(OrderGrain).Assembly).WithReferences();
                         });
                 });
+        }
     }
 }
