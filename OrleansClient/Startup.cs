@@ -25,33 +25,30 @@ namespace TestWebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddLogging(builder => builder.AddConsole());
-            services.AddSingleton(sp =>
-            {                
-                var clientBuilder = new ClientBuilder();
 
-                clientBuilder
+            services.AddSingleton(sp =>
+            {
+                return new ClientBuilder()
                 .Configure<ClusterOptions>(options =>
                 {
-                    options.ClusterId = "devCluster";
-                    options.ServiceId = "devService";
+                    options.ClusterId = Constants.ClusterId;
+                    options.ServiceId = Constants.ServiceId;
                 })
                 .UseAdoNetClustering(options =>
                 {
-                    options.Invariant = "System.Data.SqlClient";                    
-                    options.ConnectionString = Configuration.GetConnectionString("Clustering");                    
-                })                
+                    options.Invariant = Constants.Invariant;
+                    options.ConnectionString = Configuration.GetConnectionString("Clustering");
+                })
                 .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IOrder).Assembly))
                 .ConfigureLogging(builder =>
                 {
                     var loggerProvider = sp.GetRequiredService<ILoggerProvider>();
                     builder.AddProvider(loggerProvider);
-                });
-
-                return clientBuilder.Build();
+                })
+                .Build();
             });
             services.AddSingleton<ClusterClientHostedService>();
-            services.AddSingleton<IHostedService>(_ => _.GetService<ClusterClientHostedService>());
+            services.AddSingleton<IHostedService>(sp => sp.GetRequiredService<ClusterClientHostedService>());
             
             services.AddSwaggerGen(c =>
             {

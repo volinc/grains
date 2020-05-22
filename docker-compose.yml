@@ -10,6 +10,7 @@ services:
       - OrleansClient/orleansclient.local.env
     depends_on:
       - sql
+      - orleanshost
     restart: on-failure
     ports:
       - "5000:80"

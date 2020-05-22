@@ -9,17 +9,17 @@ namespace Grains
     public class OrderGrain : Grain<OrderData>, IOrder
     {        
         private readonly ILogger<OrderGrain> logger;
-        private readonly Guid id;
+        private Guid id;
 
         public OrderGrain(ILogger<OrderGrain> logger)
         {            
-            this.logger = logger;
-
-            id = this.GetPrimaryKey();
+            this.logger = logger;            
         }
 
         public override Task OnActivateAsync()
         {
+            id = this.GetPrimaryKey();
+
             logger.LogDebug($"Order {id} activated");
             return base.OnActivateAsync();
         }

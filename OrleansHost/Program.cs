@@ -1,6 +1,7 @@
 namespace Silo
 {
     using Grains;
+    using Grains.Interfaces;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -11,8 +12,6 @@ namespace Silo
 
     public static class Program
     {
-        private static readonly string invariant = "System.Data.SqlClient";
-
         public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -24,44 +23,45 @@ namespace Silo
                         options.SuppressStatusMessages = true;
                     });
                 })
-                .ConfigureLogging((context, builder) => { builder.AddConsole(); })
-                .UseOrleans((context, builder) =>
+                .ConfigureLogging((context, builder) =>
                 {
                     if (context.HostingEnvironment.IsDevelopment())
                     {
-                        //builder//.UseLocalhostClustering()
-                        //.UseInMemoryReminderService();                                                                
+                        builder.AddDebug();
                     }
-                    
+
+                    builder.AddConsole();
+                })
+                .UseOrleans((context, builder) =>
+                {                    
                     var connectionString = context.Configuration.GetConnectionString("Clustering");
                     builder
                         .Configure<ClusterOptions>(options =>
                         {
-                            options.ClusterId = "devCluster";
-                            options.ServiceId = "devService";                            
-                        })                        
-                        .AddAdoNetGrainStorage("OrleansStorage", options =>
+                            options.ClusterId = Constants.ClusterId;
+                            options.ServiceId = Constants.ServiceId;
+                        })
+                        .AddAdoNetGrainStorageAsDefault(options =>
                         {
-                            options.Invariant = invariant;
+                            options.Invariant = Constants.Invariant;
                             options.ConnectionString = connectionString;
                             options.UseJsonFormat = true;
                         })
                         .UseAdoNetClustering(options =>
                         {
-                            options.Invariant = invariant;
-                            options.ConnectionString = connectionString;                            
-                        })                        
+                            options.Invariant = Constants.Invariant;
+                            options.ConnectionString = connectionString;
+                        })
                         .UseAdoNetReminderService(options =>
                         {
-                            options.Invariant = invariant;
-                            options.ConnectionString = connectionString;                            
+                            options.Invariant = Constants.Invariant;
+                            options.ConnectionString = connectionString;
                         })
                         .ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000)
                         .ConfigureApplicationParts(parts =>
                         {
                             parts.AddApplicationPart(typeof(OrderGrain).Assembly).WithReferences();
-                        })
-                        //.UseDashboard(options => { options.Port = 10000; });
+                        });
                 });
     }
 }
