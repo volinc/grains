@@ -39,11 +39,12 @@ namespace Silo
                         {
                             options.ClusterId = "devCluster";
                             options.ServiceId = "devService";                            
-                        })
-                        .AddAdoNetGrainStorage("grains", options =>
+                        })                        
+                        .AddAdoNetGrainStorage("OrleansStorage", options =>
                         {
                             options.Invariant = invariant;
-                            options.ConnectionString = connectionString;                            
+                            options.ConnectionString = connectionString;
+                            options.UseJsonFormat = true;
                         })
                         .UseAdoNetClustering(options =>
                         {
@@ -55,12 +56,7 @@ namespace Silo
                             options.Invariant = invariant;
                             options.ConnectionString = connectionString;                            
                         })
-                        //.Configure<EndpointOptions>(options =>
-                        //{
-                        //    options.AdvertisedIPAddress = IPAddress.Loopback; //Dns.GetHostAddresses(Dns.GetHostName())[0];
-                        //    options.SiloPort = 11111;
-                        //    options.GatewayPort = 30000;
-                        //})
+                        .ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000)
                         .ConfigureApplicationParts(parts =>
                         {
                             parts.AddApplicationPart(typeof(OrderGrain).Assembly).WithReferences();

@@ -3,20 +3,16 @@ namespace Grains
     using Grains.Interfaces;    
     using System.Threading.Tasks;
     using Orleans;
-    using Orleans.Runtime;
     using System;
     using Microsoft.Extensions.Logging;
-
-    public class OrderGrain : Grain, IOrder
-    {
-        private readonly IPersistentState<OrderData> current;
+    
+    public class OrderGrain : Grain<OrderData>, IOrder
+    {        
         private readonly ILogger<OrderGrain> logger;
         private readonly Guid id;
 
-        public OrderGrain([PersistentState("current", "Grains")]IPersistentState<OrderData> current, 
-                          ILogger<OrderGrain> logger)
-        {
-            this.current = current;
+        public OrderGrain(ILogger<OrderGrain> logger)
+        {            
             this.logger = logger;
 
             id = this.GetPrimaryKey();
