@@ -6,39 +6,71 @@ using Orleans;
 
 namespace Grains
 {
-    public class OrderGrain : Grain<OrderData>, IOrder
+    public class OrderGrain : Grain<OrderState>, IOrder
     {
+        private readonly IGrainFactory grainFactory;
         private readonly ILogger<OrderGrain> logger;
-        private Guid id;
+        private Guid key;
 
-        public OrderGrain(ILogger<OrderGrain> logger)
+        public OrderGrain(IGrainFactory grainFactory, ILogger<OrderGrain> logger)
         {
+            this.grainFactory = grainFactory;
             this.logger = logger;
         }
 
-        public Task StartSearchAsync()
+        public async Task<Guid> CreateAsync()
         {
-            logger.LogDebug($"Order {id} searching started");
+            State.Created = true;
+            await WriteStateAsync();
+            logger.LogInformation($"Order {key} created");
+            return key;
+        }
+
+        public async Task StartSearchAsync()
+        {
+            ThrowIfNotExists();
+            var search = grainFactory.GetGrain<ISearchGrain>(key);
+            await search.StartAsync(this, BuildSearchParameters());
+            logger.LogInformation($"Order {key} searching started");
+        }
+
+        private static SearchParameters BuildSearchParameters()
+        {
+            return new SearchParameters(endAt: DateTimeOffset.Now.AddMinutes(4));
+        }
+
+        public async Task StopSearchAsync()
+        {
+            ThrowIfNotExists();
+            var search = grainFactory.GetGrain<ISearchGrain>(key);
+            await search.StopAsync();
+            logger.LogInformation($"Order {key} searching stopped");
+        }
+
+        public Task AcceptAsync()
+        {
+            ThrowIfNotExists();
+            logger.LogInformation($"Order {key} accepted");
             return Task.CompletedTask;
         }
 
-        public Task StopSearchAsync()
+        private void ThrowIfNotExists()
         {
-            logger.LogDebug($"Order {id} searching stopped");
-            return Task.CompletedTask;
+            if (!State.Created)
+                throw new InvalidOperationException($"Order {key} does not exist");
         }
 
         public override Task OnActivateAsync()
         {
-            id = this.GetPrimaryKey();
+            key = this.GetPrimaryKey();
 
-            logger.LogDebug($"Order {id} activated");
+            logger.LogInformation($"Order {key} activated");
             return base.OnActivateAsync();
         }
 
         public override Task OnDeactivateAsync()
         {
-            logger.LogDebug($"Order {id} deactivated");
+            logger.LogInformation($"Order {key} deactivated");
             return base.OnDeactivateAsync();
         }
     }

@@ -14,10 +14,12 @@ namespace OrleansClient
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(logging =>
+                .ConfigureLogging((context, logging) =>
                 {
-                    logging.AddDebug()
-                        .AddConsole();
+                    //if (context.HostingEnvironment.IsDevelopment()) 
+                    //    builder.AddDebug();
+
+                    logging.AddConsole();
                 })
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
         }

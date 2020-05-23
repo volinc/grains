@@ -17,13 +17,15 @@ namespace OrleansClient.Controllers
             this.clusterClient = clusterClient;
         }
 
+        // (customer) create an order
         [HttpPost]
         public Task<Guid> CreateAsync()
         {
             var order = clusterClient.GetGrain<IOrder>(Guid.NewGuid());
-            return Task.FromResult(order.GetPrimaryKey());
+            return order.CreateAsync();
         }
 
+        // (customer) confirm the order to start running automatic search
         [HttpPost("{id}/confirm")]
         public async Task ConfirmAsync(Guid id)
         {
@@ -31,8 +33,17 @@ namespace OrleansClient.Controllers
             await order.StartSearchAsync();
         }
 
+        // (customer) cancel the order to stop automatic search
         [HttpPost("{id}/cancel")]
         public async Task CancelAsync(Guid id)
+        {
+            var order = clusterClient.GetGrain<IOrder>(id);
+            await order.StopSearchAsync();
+        }
+
+        // (executor) accept the order
+        [HttpPost("{id}/accept")]
+        public async Task AcceptAsync(Guid id)
         {
             var order = clusterClient.GetGrain<IOrder>(id);
             await order.StopSearchAsync();

@@ -29,7 +29,8 @@ namespace OrleansHost
                 })
                 .ConfigureLogging((context, builder) =>
                 {
-                    if (context.HostingEnvironment.IsDevelopment()) builder.AddDebug();
+                    //if (context.HostingEnvironment.IsDevelopment()) 
+                    //    builder.AddDebug();
 
                     builder.AddConsole();
                 })
