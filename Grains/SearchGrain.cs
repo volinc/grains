@@ -56,14 +56,18 @@ namespace Grains
             logger.LogInformation($"### Search 'ReceiveReminder' {status.CurrentTickTime} handled");
         }
 
-        protected Task RunAsync()
+        protected async Task RunAsync()
         {
             // UpdateSuggestionStates
+
+            if (!State.IsStarted)
+                return;
 
             if (State.Parameters.EndAt < DateTimeOffset.Now)
             {
                 State.IsStarted = false;
-                return Task.CompletedTask;
+                await WriteStateAsync();
+                return;
             }
 
             // CreateOrReadSuggestions
@@ -77,8 +81,6 @@ namespace Grains
                 return RunAsync();
 
             }, null, TimeSpan.FromSeconds(15), TimeSpan.FromMilliseconds(-1));
-
-            return Task.CompletedTask;
         }
 
         public override async Task OnActivateAsync()
