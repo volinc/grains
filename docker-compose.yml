@@ -33,10 +33,13 @@ services:
       - "30000:30000"
       - "12000:12000"
     networks:
-      - backend
+     backend:
+      ipv4_address: 172.10.1.10
+      aliases:
+        - orleanshost
 
   sql:
-    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    image: "mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04"
     hostname: "sql"
     environment:
       - ACCEPT_EULA=Y
@@ -55,3 +58,7 @@ volumes:
 
 networks:
   backend:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.10.1.0/16
