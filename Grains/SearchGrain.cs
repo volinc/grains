@@ -53,6 +53,7 @@ namespace Grains
                 return;
             }
 
+            await RunAsync();
             logger.LogInformation($"### Search 'ReceiveReminder' {status.CurrentTickTime} handled");
         }
 
@@ -85,11 +86,6 @@ namespace Grains
 
         public override async Task OnActivateAsync()
         {
-            if (State.IsStarted)
-            {
-                await RunAsync();
-            }
-
             logger.LogInformation($"### Search {this.GetPrimaryKey()} activated");
             await base.OnActivateAsync();
         }
