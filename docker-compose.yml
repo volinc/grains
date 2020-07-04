@@ -28,10 +28,8 @@ services:
       - OrleansHost/orleanshost.local.env
     restart: on-failure
     ports:
-      - "10000:10000"
       - "11111:11111"
       - "30000:30000"
-      - "12000:12000"
     networks:
      backend:
       ipv4_address: 172.10.1.10
@@ -46,6 +44,7 @@ services:
       - SA_PASSWORD=12345(!)a
     volumes:
       - sqlvolume:/var/opt/mssql
+    restart: on-failure
     ports:
       - "1433:1433"
     networks:
