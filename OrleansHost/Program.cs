@@ -10,6 +10,8 @@ using Orleans.Hosting;
 
 namespace OrleansHost
 {
+    using System;
+
     public static class Program
     {
         public static void Main(string[] args)
@@ -22,9 +24,9 @@ namespace OrleansHost
             return Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
                 {
-                    services.Configure<ConsoleLifetimeOptions>(options =>
+                    services.Configure<HostOptions>(options =>
                     {
-                        options.SuppressStatusMessages = true;
+                        options.ShutdownTimeout = TimeSpan.FromSeconds(5);
                     });
                 })
                 .ConfigureLogging((context, builder) =>

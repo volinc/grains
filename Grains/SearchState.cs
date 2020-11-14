@@ -4,7 +4,7 @@ namespace Grains
 {
     public class SearchState
     {
-        public IOrder Order { get; set; }
+        public IOrderGrain Order { get; set; }
 
         public SearchParameters Parameters { get; set; }
 

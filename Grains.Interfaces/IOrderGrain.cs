@@ -4,7 +4,7 @@ using Orleans;
 
 namespace Grains.Interfaces
 {
-    public interface IOrder : IGrainWithGuidKey
+    public interface IOrderGrain : IGrainWithGuidKey
     {
         Task<Guid> CreateAsync();
 
@@ -13,5 +13,7 @@ namespace Grains.Interfaces
         Task StopSearchAsync();
 
         Task AcceptAsync();
+
+        Task CheckExceptionSerializationAsync();
     }
 }

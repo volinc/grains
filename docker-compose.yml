@@ -32,7 +32,7 @@ services:
       - "30000:30000"
     networks:
      backend:
-      ipv4_address: 172.10.1.10
+      ipv4_address: 173.10.1.10
       aliases:
         - orleanshost
 
@@ -60,4 +60,4 @@ networks:
     driver: bridge
     ipam:
      config:
-       - subnet: 172.10.1.0/16
+       - subnet: 173.10.1.0/16

@@ -39,7 +39,7 @@ namespace OrleansClient
                         options.Invariant = Constants.Invariant;
                         options.ConnectionString = Configuration.GetConnectionString("Clustering");
                     })
-                    .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IOrder).Assembly))
+                    .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IOrderGrain).Assembly))
                     .ConfigureLogging(builder =>
                     {
                         var loggerProvider = sp.GetRequiredService<ILoggerProvider>();

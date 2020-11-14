@@ -18,7 +18,7 @@ namespace Grains
             this.logger = logger;
         }
         
-        public async Task StartAsync(IOrder order, SearchParameters parameters)
+        public async Task StartAsync(IOrderGrain order, SearchParameters parameters)
         {
             if (State.IsStarted)
                 return;

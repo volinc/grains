@@ -6,16 +6,23 @@ using Orleans;
 
 namespace Grains
 {
-    public class OrderGrain : Grain<OrderState>, IOrder
+    using Microsoft.Extensions.Hosting;
+    using Orleans.Runtime;
+
+    public class OrderGrain : Grain<OrderState>, IOrderGrain
     {
         private readonly IGrainFactory grainFactory;
         private readonly ILogger<OrderGrain> logger;
+        private readonly IHostApplicationLifetime appLifetime;
         private Guid key;
 
-        public OrderGrain(IGrainFactory grainFactory, ILogger<OrderGrain> logger)
+        public OrderGrain(IGrainFactory grainFactory, 
+                          ILogger<OrderGrain> logger, 
+                          IHostApplicationLifetime appLifetime)
         {
             this.grainFactory = grainFactory;
             this.logger = logger;
+            this.appLifetime = appLifetime;
         }
 
         public async Task<Guid> CreateAsync()
@@ -54,6 +61,11 @@ namespace Grains
             return Task.CompletedTask;
         }
 
+        public Task CheckExceptionSerializationAsync()
+        {
+            throw new EntityNotFoundException(typeof(IOrderGrain), "A");
+        }
+
         private void ThrowIfNotExists()
         {
             if (!State.Created)
@@ -62,6 +74,11 @@ namespace Grains
 
         public override Task OnActivateAsync()
         {
+            appLifetime.ApplicationStopping.Register(() =>
+            {
+                WriteStateAsync().ConfigureAwait(false).GetAwaiter();
+            });
+
             key = this.GetPrimaryKey();
 
             logger.LogInformation($"Order {key} activated");
