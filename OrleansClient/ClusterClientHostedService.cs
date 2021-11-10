@@ -48,7 +48,6 @@ namespace OrleansClient
                 }
 
                 logger.LogError(error, $"Failed to connect to Orleans cluster on attempt {attempt} of {maxAttempts}.");
-
                 return false;
 
             }).Ignore();

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">  
   
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>    
+    <TargetFramework>net6.0</TargetFramework>    
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>    
     <ServerGarbageCollection>true</ServerGarbageCollection>    
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -12,15 +12,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Orleans.Client" Version="3.3.0" />
-    <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="3.3.0" />
-    <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.3.0" />
-    <PackageReference Include="Microsoft.Orleans.Reminders.AdoNet" Version="3.3.0" />
-    <PackageReference Include="Microsoft.Orleans.Server" Version="3.3.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />        
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Orleans.Client" Version="3.5.1" />
+    <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="3.5.1" />
+    <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.5.1" />
+    <PackageReference Include="Microsoft.Orleans.Reminders.AdoNet" Version="3.5.1" />
+    <PackageReference Include="Microsoft.Orleans.Server" Version="3.5.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />        
   </ItemGroup>
   
   <ItemGroup>
