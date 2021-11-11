@@ -1,27 +1,27 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+var builder = WebApplication.CreateBuilder(args);
 
-namespace OrleansClient
+var connectionString = builder.Configuration.GetConnectionString("Clustering");
+builder.Services.AddClusterClient(connectionString);
+
+builder.Services.AddControllers();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+if (builder.Environment.IsDevelopment())
+    builder.Logging.AddDebug();
+
+builder.Logging.AddConsole();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
-    public static class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        private static IHostBuilder CreateHostBuilder(string[] args)
-        {
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureLogging((context, logging) =>
-                {
-                    //if (context.HostingEnvironment.IsDevelopment()) 
-                    //    builder.AddDebug();
-
-                    logging.AddConsole();
-                })
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
-        }
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+app.MapControllers();
+
+app.Run();

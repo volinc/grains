@@ -4,6 +4,6 @@
     {
         public const string ClusterId = "grains";
         public const string ServiceId = "search";
-        public const string Invariant = "System.Data.SqlClient";
+        public const string Invariant = "Npgsql";
     }
 }

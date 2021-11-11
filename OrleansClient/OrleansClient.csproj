@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
     <ServerGarbageCollection>true</ServerGarbageCollection>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <RootNamespace>OrleansClient</RootNamespace>    
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>    
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
   
@@ -17,8 +17,8 @@
     <PackageReference Include="Microsoft.Orleans.Server" Version="3.5.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0" />
+    <PackageReference Include="Npgsql" Version="5.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
 
   <ItemGroup>

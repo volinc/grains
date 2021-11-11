@@ -1,11 +1,11 @@
-$user = "sa"
-$password = "12345(!)a"
-$database = "grains"
-chcp 65001
+$coonection_string = "postgresql://postgres:pass@localhost/grains"
 
-sqlcmd -S localhost -U $user -P $password -Q "CREATE DATABASE $database"
-sqlcmd -S localhost -U $user -P $password -d $database -i SQLServer-Main.sql
-sqlcmd -S localhost -U $user -P $password -d $database -i SQLServer-Clustering.sql
-sqlcmd -S localhost -U $user -P $password -d $database -i SQLServer-Persistence.sql
-sqlcmd -S localhost -U $user -P $password -d $database -i SQLServer-Reminders.sql
+function run($file) {
+    psql -f $file -w ${coonection_string}
+}
+
+run("PostgreSQL-Main.sql")
+run("PostgreSQL-Clustering.sql")
+run("PostgreSQL-Persistence.sql")
+run("PostgreSQL-Reminders.sql")
           
