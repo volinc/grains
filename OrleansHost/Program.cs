@@ -26,8 +26,10 @@ builder.ConfigureServices(services =>
     });
 });
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 builder.UseOrleans((context, builder) =>
-{
+{    
     var connectionString = context.Configuration.GetConnectionString("Clustering");
     builder
         .Configure<ClusterOptions>(options =>
