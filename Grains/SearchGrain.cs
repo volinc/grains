@@ -1,21 +1,32 @@
 using System;
 using System.Threading.Tasks;
 using Grains.Interfaces;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Orleans;
 using Orleans.Runtime;
 
 namespace Grains
 {
-    public class SearchGrain : Grain<SearchState>, ISearchGrain, IRemindable
+    public class SearchGrain : Grain, ISearchGrain, IRemindable
     {
         private const string ReminderName = "search";
 
-        private readonly ILogger logger;
+        private readonly IPersistentState<SearchState> _search;
+        private readonly ILogger _logger;
+        private readonly IHostApplicationLifetime _hostAppLifetime;
+        private Guid _key;
 
-        public SearchGrain(ILogger<SearchGrain> logger)
+        private SearchState State => _search.State;
+
+        public SearchGrain(
+            [PersistentState(nameof(SearchGrain))] IPersistentState<SearchState> search,
+            ILogger<SearchGrain> logger,
+            IHostApplicationLifetime hostAppLifetime)
         {
-            this.logger = logger;
+            _search = search;
+            _logger = logger;
+            _hostAppLifetime = hostAppLifetime;
         }
         
         public async Task StartAsync(IOrderGrain order, SearchParameters parameters)
@@ -28,11 +39,12 @@ namespace Grains
             State.IsStarted = true;
             
             await RegisterOrUpdateReminder(ReminderName, TimeSpan.Zero, TimeSpan.FromMinutes(1));
-            await WriteStateAsync();
+            await _search.WriteStateAsync();
 
+            await Console.Out.WriteLineAsync($"Value = {State.Value}");
             await RunAsync();
 
-            logger.LogInformation($"### Search 'RegisterOrUpdateReminder' {DateTime.Now} handled");
+            _logger.LogInformation($"### Search 'RegisterOrUpdateReminder' {DateTime.Now} handled");
         }
         
         public async Task StopAsync()
@@ -41,59 +53,83 @@ namespace Grains
                 return;
 
             State.IsStarted = false;
-            await WriteStateAsync();
+            await _search.WriteStateAsync();
         }
 
         public async Task ReceiveReminder(string reminderName, TickStatus status)
         {
-            if (!State.IsStarted || State.Parameters.EndAt < DateTimeOffset.Now)
+            if (DateTimeOffset.Now > State.Parameters.EndAt)
             {
-                var reminder = await GetReminder(reminderName);
-                await UnregisterReminder(reminder);
-                return;
+                State.IsStarted = false;
+                await _search.WriteStateAsync();
             }
-
+            
             await RunAsync();
-            logger.LogInformation($"### Search 'ReceiveReminder' {status.CurrentTickTime} handled");
+            _logger.LogInformation($"### Search 'ReceiveReminder' {status.CurrentTickTime} handled");
         }
 
         protected async Task RunAsync()
         {
-            // UpdateSuggestionStates
-
             if (!State.IsStarted)
-                return;
-
-            if (State.Parameters.EndAt < DateTimeOffset.Now)
             {
-                State.IsStarted = false;
-                await WriteStateAsync();
+                var reminder = await GetReminder(ReminderName);
+                await UnregisterReminder(reminder);
                 return;
             }
 
-            // CreateOrReadSuggestions
-            // SendOffers
+            Loop(TimeSpan.Zero);                        
+        }
 
-            logger.LogInformation($"### Search 'Timer' start waiting {DateTime.Now} handled");
+        protected void Loop(TimeSpan dueTime)
+        {
+            _logger.LogInformation($"### Search 'Timer' start waiting {DateTime.Now} handled");
 
             RegisterTimer(stateObj =>
             {
-                logger.LogInformation($"### Search 'Timer' end waiting {DateTime.Now} handled");
-                return RunAsync();
+                _logger.LogInformation($"### Search 'Timer' end waiting {DateTime.Now} handled");
 
-            }, null, TimeSpan.FromSeconds(15), TimeSpan.FromMilliseconds(-1));
+                return LoopSearchAsync(Loop);
+
+            }, null, dueTime, TimeSpan.FromMilliseconds(-1));
+        }
+
+        private async Task LoopSearchAsync(Action<TimeSpan> loop)
+        {
+            await Task.Delay(500);            
+            State.Value += 1;
+            await Console.Out.WriteLineAsync($"Value = {State.Value}");
+            loop(TimeSpan.FromSeconds(10));
         }
 
         public override async Task OnActivateAsync()
-        {
-            logger.LogInformation($"### Search {this.GetPrimaryKey()} activated");
+        {        
+            _key = this.GetPrimaryKey();
             await base.OnActivateAsync();
+            _hostAppLifetime.ApplicationStopping.Register(() =>
+            {
+                _search.WriteStateAsync().ConfigureAwait(false).GetAwaiter();                
+            });
+            _logger.LogInformation($"### Search {_key} activated");
         }
 
-        public override Task OnDeactivateAsync()
+        public override async Task OnDeactivateAsync()
+        {                        
+            await base.OnDeactivateAsync();            
+            _logger.LogInformation($"### Search {_key} deactivated");
+        }
+        
+        public Task<long> GetValueAsync()
         {
-            logger.LogInformation($"### Search {this.GetPrimaryKey()} deactivated");
-            return base.OnDeactivateAsync();
+            return Task.FromResult(State.Value);
+        }
+
+        [Serializable]
+        public class SearchState
+        {
+            public IOrderGrain Order { get; set; }
+            public SearchParameters Parameters { get; set; }
+            public long Value { get; set; }
+            public bool IsStarted { get; set; }
         }
     }
 }

@@ -17,8 +17,7 @@ services:
       - "11111:11111"
       - "30000:30000"
     networks:
-     grains-backend:
-      ipv4_address: 174.10.1.1
+     grains-backend:      
       aliases:
         - orleanshost
 

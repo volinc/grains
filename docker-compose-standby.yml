@@ -24,4 +24,4 @@ services:
     networks:
      grains-backend:
       aliases:
-        - sql
+        - grains-sql

@@ -3,42 +3,47 @@ using System.Threading.Tasks;
 using Grains.Interfaces;
 using Microsoft.Extensions.Logging;
 using Orleans;
+using Microsoft.Extensions.Hosting;
+using Orleans.Runtime;
 
 namespace Grains
 {
-    using Microsoft.Extensions.Hosting;
-    using Orleans.Runtime;
-
-    public class OrderGrain : Grain<OrderState>, IOrderGrain
+    public class OrderGrain : Grain, IOrderGrain
     {
-        private readonly IGrainFactory grainFactory;
-        private readonly ILogger<OrderGrain> logger;
-        private readonly IHostApplicationLifetime appLifetime;
-        private Guid key;
+        private readonly IPersistentState<OrderState> _order;
+        private readonly IGrainFactory _grainFactory;
+        private readonly ILogger<OrderGrain> _logger;
+        private readonly IHostApplicationLifetime _hostAppLifetime;
+        private Guid _key;
 
-        public OrderGrain(IGrainFactory grainFactory, 
-                          ILogger<OrderGrain> logger, 
-                          IHostApplicationLifetime appLifetime)
+        private OrderState State => _order.State;
+
+        public OrderGrain(
+            [PersistentState(nameof(OrderGrain))] IPersistentState<OrderState> order,
+            IGrainFactory grainFactory, 
+            ILogger<OrderGrain> logger,
+            IHostApplicationLifetime hostAppLifetime)
         {
-            this.grainFactory = grainFactory;
-            this.logger = logger;
-            this.appLifetime = appLifetime;
+            _order = order;
+            _grainFactory = grainFactory;
+            _logger = logger;
+            _hostAppLifetime = hostAppLifetime;                        
         }
 
         public async Task<Guid> CreateAsync()
         {
             State.Created = true;
-            await WriteStateAsync();
-            logger.LogInformation($"Order {key} created");
-            return key;
+            await _order.WriteStateAsync();
+            _logger.LogInformation($"Order {_key} created");
+            return _key;
         }
 
         public async Task StartSearchAsync()
         {
             ThrowIfNotExists();
-            var search = grainFactory.GetGrain<ISearchGrain>(key);
+            var search = _grainFactory.GetGrain<ISearchGrain>(_key);
             await search.StartAsync(this, BuildSearchParameters());
-            logger.LogInformation($"Order {key} searching started");
+            _logger.LogInformation($"Order {_key} searching started");
         }
 
         private static SearchParameters BuildSearchParameters()
@@ -49,46 +54,58 @@ namespace Grains
         public async Task StopSearchAsync()
         {
             ThrowIfNotExists();
-            var search = grainFactory.GetGrain<ISearchGrain>(key);
+            var search = _grainFactory.GetGrain<ISearchGrain>(_key);
             await search.StopAsync();
-            logger.LogInformation($"Order {key} searching stopped");
+            _logger.LogInformation($"Order {_key} searching stopped");
         }
 
         public Task AcceptAsync()
         {
             ThrowIfNotExists();
-            logger.LogInformation($"Order {key} accepted");
+            _logger.LogInformation($"Order {_key} accepted");
             return Task.CompletedTask;
-        }
-
-        public Task CheckExceptionSerializationAsync()
-        {
-            throw new EntityNotFoundException(typeof(IOrderGrain), "A");
         }
 
         private void ThrowIfNotExists()
         {
             if (!State.Created)
-                throw new InvalidOperationException($"Order {key} does not exist");
+                throw new InvalidOperationException($"Order {_key} does not exist");
         }
 
-        public override Task OnActivateAsync()
-        {
-            appLifetime.ApplicationStopping.Register(() =>
+        public override async Task OnActivateAsync()
+        {            
+            _key = this.GetPrimaryKey();            
+            await base.OnActivateAsync();
+            _hostAppLifetime.ApplicationStopping.Register(() =>
             {
-                WriteStateAsync().ConfigureAwait(false).GetAwaiter();
+                _order.WriteStateAsync().ConfigureAwait(false).GetAwaiter();
             });
-
-            key = this.GetPrimaryKey();
-
-            logger.LogInformation($"Order {key} activated");
-            return base.OnActivateAsync();
+            _logger.LogInformation($"Order {_key} activated");            
         }
 
-        public override Task OnDeactivateAsync()
+        public override async Task OnDeactivateAsync()
         {
-            logger.LogInformation($"Order {key} deactivated");
-            return base.OnDeactivateAsync();
+            await base.OnDeactivateAsync();
+            _logger.LogInformation($"Order {_key} deactivated");
+        }
+        
+        public Task StopProcessAsync()
+        {            
+            _hostAppLifetime.StopApplication();
+            return Task.CompletedTask;
+        }
+
+        public async Task<long> GetSearchValueAsync()
+        {
+            ThrowIfNotExists();
+            var search = _grainFactory.GetGrain<ISearchGrain>(_key);
+            return await search.GetValueAsync();
+        }
+
+        [Serializable]
+        public class OrderState
+        {
+            public bool Created { get; set; }
         }
     }
 }

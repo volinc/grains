@@ -4,8 +4,6 @@ using Orleans;
 
 namespace OrleansClient.Controllers
 {
-    using System.Diagnostics;
-
     [Route("orders")]
     [ApiController]
     public class OrderController : ControllerBase
@@ -17,7 +15,6 @@ namespace OrleansClient.Controllers
             this.clusterClient = clusterClient;
         }
 
-        // (customer) create an order
         [HttpPost]
         public Task<Guid> CreateAsync()
         {
@@ -25,7 +22,6 @@ namespace OrleansClient.Controllers
             return order.CreateAsync();
         }
 
-        // (customer) confirm the order to start running automatic search
         [HttpPost("{id}/confirm")]
         public async Task ConfirmAsync(Guid id)
         {
@@ -33,7 +29,6 @@ namespace OrleansClient.Controllers
             await order.StartSearchAsync();
         }
 
-        // (customer) cancel the order to stop automatic search
         [HttpPost("{id}/cancel")]
         public async Task CancelAsync(Guid id)
         {
@@ -41,7 +36,6 @@ namespace OrleansClient.Controllers
             await order.StopSearchAsync();
         }
 
-        // (executor) accept the order
         [HttpPost("{id}/accept")]
         public async Task AcceptAsync(Guid id)
         {
@@ -49,19 +43,34 @@ namespace OrleansClient.Controllers
             await order.StopSearchAsync();
         }
 
-        [HttpPost("{id}/check")]
-        public async Task CheckExceptionSerializationAsync(Guid id)
+        [HttpGet("{id}/search-value")]
+        public async Task<long> GetSearchValueAsync(Guid id)
         {
-            try
-            {
-                var order = clusterClient.GetGrain<IOrderGrain>(id);
-                await order.CheckExceptionSerializationAsync();
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine(exception);
-                throw;
-            }
+            var order = clusterClient.GetGrain<IOrderGrain>(id);
+            return await order.GetSearchValueAsync();
         }
+
+        [HttpPost("{id}/stop-process")]
+        public Task StopProcessAsync(Guid id)
+        {
+            var order = clusterClient.GetGrain<IOrderGrain>(id);
+            order.StopProcessAsync().Ignore();
+            return Task.CompletedTask;
+        }
+
+        //[HttpPost("{id}/check")]
+        //public async Task CheckExceptionSerializationAsync(Guid id)
+        //{
+        //    try
+        //    {
+        //        var order = clusterClient.GetGrain<IOrderGrain>(id);
+        //        await order.CheckExceptionSerializationAsync();
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Debug.WriteLine(exception);
+        //        throw;
+        //    }
+        //}
     }
 }
