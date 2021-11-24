@@ -17,10 +17,10 @@ services:
       - "11111:11111"
       - "30000:30000"
     networks:
-     grains-backend:      
+     grains-backend:
       aliases:
-        - orleanshost
-
+      - orleanshost     
+    
   orleansclient:
     image: ${DOCKER_REGISTRY-}client
     build:
@@ -34,4 +34,4 @@ services:
     ports:
       - "5000:80"
     networks:
-      - grains-backend  
+      - grains-backend      
