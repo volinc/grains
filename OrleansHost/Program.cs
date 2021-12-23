@@ -10,12 +10,12 @@ using Orleans.Hosting;
 
 var builder = Host.CreateDefaultBuilder(args);
 
-builder.ConfigureLogging((context, builder) =>
+builder.ConfigureLogging((context, logging) =>
 {
     if (context.HostingEnvironment.IsDevelopment()) 
-        builder.AddDebug();
+        logging.AddDebug();
 
-    builder.AddConsole();
+    logging.AddConsole();
 });
 
 builder.ConfigureServices(services =>
@@ -28,10 +28,10 @@ builder.ConfigureServices(services =>
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-builder.UseOrleans((context, builder) =>
+builder.UseOrleans((context, siloBuilder) =>
 {    
     var connectionString = context.Configuration.GetConnectionString("Clustering");
-    builder
+    siloBuilder
         .Configure<ClusterOptions>(options =>
         {
             options.ClusterId = Constants.ClusterId;

@@ -2,7 +2,8 @@
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
-using OrleansClient;
+
+namespace OrleansClient;
 
 public static class ServiceCollectionExtensions
 {
@@ -21,7 +22,7 @@ public static class ServiceCollectionExtensions
             })
             .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IOrderGrain).Assembly))
             .Build();
-            
+
         services.AddSingleton(clusterClient);
 
         services.AddSingleton<ClusterClientHostedService>();
