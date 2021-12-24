@@ -12,7 +12,7 @@ var builder = Host.CreateDefaultBuilder(args);
 
 builder.ConfigureLogging((context, logging) =>
 {
-    if (context.HostingEnvironment.IsDevelopment()) 
+    if (context.HostingEnvironment.IsDevelopment())
         logging.AddDebug();
 
     logging.AddConsole();
@@ -20,16 +20,13 @@ builder.ConfigureLogging((context, logging) =>
 
 builder.ConfigureServices(services =>
 {
-    services.Configure<HostOptions>(options =>
-    {
-        options.ShutdownTimeout = TimeSpan.FromSeconds(5);
-    });
+    services.Configure<HostOptions>(options => { options.ShutdownTimeout = TimeSpan.FromSeconds(5); });
 });
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.UseOrleans((context, siloBuilder) =>
-{    
+{
     var connectionString = context.Configuration.GetConnectionString("Clustering");
     siloBuilder
         .Configure<ClusterOptions>(options =>
