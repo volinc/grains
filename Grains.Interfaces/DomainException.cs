@@ -1,21 +1,19 @@
-﻿namespace Grains.Interfaces
+﻿using System;
+
+namespace Grains.Interfaces;
+
+[Serializable]
+public class DomainException : Exception
 {
-    using System;
-    using System.Runtime.Serialization;
-
-    [Serializable]
-    public class DomainException : Exception
+    public DomainException()
     {
-        public DomainException()
-        {
-        }
+    }
 
-        public DomainException(string message) : base(message)
-        {
-        }
+    public DomainException(string message) : base(message)
+    {
+    }
 
-        public DomainException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
+    public DomainException(string message, Exception innerException) : base(message, innerException)
+    {
     }
 }
