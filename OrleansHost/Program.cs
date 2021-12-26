@@ -10,7 +10,8 @@ builder.ConfigureLogging((context, logging) =>
 
 builder.ConfigureServices(services =>
 {
-    services.Configure<HostOptions>(options => { options.ShutdownTimeout = TimeSpan.FromSeconds(5); });
+    // https://andrewlock.net/deploying-asp-net-core-applications-to-kubernetes-part-11-avoiding-downtime-in-rolling-deployments-by-blocking-sigterm/
+    services.Configure<HostOptions>(options => { options.ShutdownTimeout = TimeSpan.FromSeconds(45); });
 });
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
