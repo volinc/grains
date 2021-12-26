@@ -21,6 +21,23 @@ public class SearchGrain : Grain, ISearchGrain, IRemindable
 
     private SearchState State => _search.State;
 
+    public override async Task OnActivateAsync()
+    {
+        _key = this.GetPrimaryKey();
+        await base.OnActivateAsync();
+        _hostAppLifetime.ApplicationStopping.Register(() =>
+        {
+            _search.WriteStateAsync().ConfigureAwait(false).GetAwaiter();
+        });
+        _logger.LogInformation($"### Search {_key} activated");
+    }
+
+    public override async Task OnDeactivateAsync()
+    {
+        await base.OnDeactivateAsync();
+        _logger.LogInformation($"### Search {_key} deactivated");
+    }
+
     public async Task ReceiveReminder(string reminderName, TickStatus status)
     {
         if (DateTimeOffset.Now > State.Parameters.EndAt)
@@ -96,24 +113,7 @@ public class SearchGrain : Grain, ISearchGrain, IRemindable
         await Console.Out.WriteLineAsync($"Value = {State.Value}");
         loop(TimeSpan.FromSeconds(10));
     }
-
-    public override async Task OnActivateAsync()
-    {
-        _key = this.GetPrimaryKey();
-        await base.OnActivateAsync();
-        _hostAppLifetime.ApplicationStopping.Register(() =>
-        {
-            _search.WriteStateAsync().ConfigureAwait(false).GetAwaiter();
-        });
-        _logger.LogInformation($"### Search {_key} activated");
-    }
-
-    public override async Task OnDeactivateAsync()
-    {
-        await base.OnDeactivateAsync();
-        _logger.LogInformation($"### Search {_key} deactivated");
-    }
-
+    
     [Serializable]
     public class SearchState
     {
