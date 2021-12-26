@@ -1,20 +1,17 @@
-using Orleans;
-using Orleans.Runtime;
-
 namespace OrleansClient;
 
 public class ClusterClientHostedService : IHostedService
 {
-    private readonly IClusterClient clusterClient;
-    private readonly ILogger<ClusterClientHostedService> logger;
-    private readonly Random random;
+    private readonly IClusterClient _clusterClient;
+    private readonly ILogger<ClusterClientHostedService> _logger;
+    private readonly Random _random;
 
     public ClusterClientHostedService(IClusterClient clusterClient,
         ILogger<ClusterClientHostedService> logger)
     {
-        this.clusterClient = clusterClient;
-        this.logger = logger;
-        random = new Random();
+        _clusterClient = clusterClient;
+        _logger = logger;
+        _random = new Random();
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -22,7 +19,7 @@ public class ClusterClientHostedService : IHostedService
         var attempt = 0;
         const int maxAttempts = 100;
 
-        clusterClient.Connect(async error =>
+        _clusterClient.Connect(async error =>
         {
             if (cancellationToken.IsCancellationRequested)
                 return false;
@@ -31,7 +28,7 @@ public class ClusterClientHostedService : IHostedService
             {
                 try
                 {
-                    var delay = TimeSpan.FromSeconds(random.Next(3, 7));
+                    var delay = TimeSpan.FromSeconds(_random.Next(3, 7));
                     await Task.Delay(delay, cancellationToken);
                 }
                 catch (OperationCanceledException)
@@ -42,7 +39,7 @@ public class ClusterClientHostedService : IHostedService
                 return true;
             }
 
-            logger.LogError(error, $"Failed to connect to Orleans cluster on attempt {attempt} of {maxAttempts}.");
+            _logger.LogError(error, $"Failed to connect to Orleans cluster on attempt {attempt} of {maxAttempts}.");
             return false;
         }).Ignore();
 
@@ -53,11 +50,11 @@ public class ClusterClientHostedService : IHostedService
     {
         try
         {
-            await clusterClient.Close();
+            await _clusterClient.Close();
         }
         catch (OrleansException error)
         {
-            logger.LogWarning(error,
+            _logger.LogWarning(error,
                 "Error while gracefully disconnecting from Orleans cluster. Will ignore and continue to shutdown.");
         }
     }

@@ -27,6 +27,7 @@ public class SearchGrain : Grain, ISearchGrain, IRemindable
         await base.OnActivateAsync();
         _hostAppLifetime.ApplicationStopping.Register(() =>
         {
+            _logger.LogInformation("Handle shutdown");
             _search.WriteStateAsync().ConfigureAwait(false).GetAwaiter();
         });
         _logger.LogInformation($"### Search {_key} activated");
@@ -98,7 +99,7 @@ public class SearchGrain : Grain, ISearchGrain, IRemindable
     {
         _logger.LogInformation($"### Search 'Timer' start waiting {DateTime.Now} handled");
 
-        RegisterTimer(stateObj =>
+        RegisterTimer(_ =>
         {
             _logger.LogInformation($"### Search 'Timer' end waiting {DateTime.Now} handled");
 

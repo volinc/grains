@@ -1,9 +1,4 @@
-﻿using Grains.Interfaces;
-using Orleans;
-using Orleans.Configuration;
-using Orleans.Hosting;
-
-namespace OrleansClient;
+﻿namespace OrleansClient;
 
 public static class ServiceCollectionExtensions
 {
