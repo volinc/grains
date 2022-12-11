@@ -1,6 +1,8 @@
+using System.Threading;
+
 namespace Grains;
 
-public class OrderGrain : Grain, IOrderGrain
+public class OrderGrain : IGrainBase, IOrderGrain
 {
     private readonly IGrainFactory _grainFactory;
     private readonly IHostApplicationLifetime _hostAppLifetime;
@@ -8,12 +10,13 @@ public class OrderGrain : Grain, IOrderGrain
     private readonly IPersistentState<OrderState> _order;
     private Guid _key;
 
-    public OrderGrain(
+    public OrderGrain(IGrainContext grainContext,
         [PersistentState(nameof(OrderGrain))] IPersistentState<OrderState> order,
         IGrainFactory grainFactory,
         ILogger<OrderGrain> logger,
         IHostApplicationLifetime hostAppLifetime)
     {
+        GrainContext = grainContext;
         _order = order;
         _grainFactory = grainFactory;
         _logger = logger;
@@ -21,6 +24,8 @@ public class OrderGrain : Grain, IOrderGrain
     }
 
     private OrderState State => _order.State;
+
+    public IGrainContext GrainContext { get; }
 
     public async Task<Guid> CreateAsync()
     {
@@ -77,21 +82,21 @@ public class OrderGrain : Grain, IOrderGrain
             throw new InvalidOperationException($"Order {_key} does not exist");
     }
 
-    public override async Task OnActivateAsync()
+    public Task OnActivateAsync(CancellationToken cancellationToken)
     {
         _key = this.GetPrimaryKey();
-        await base.OnActivateAsync();
         _hostAppLifetime.ApplicationStopping.Register(() =>
         {
             _order.WriteStateAsync().ConfigureAwait(false).GetAwaiter();
         });
         _logger.LogInformation($"Order {_key} activated");
+        return Task.CompletedTask;
     }
 
-    public override async Task OnDeactivateAsync()
+    public Task OnDeactivateAsync(DeactivationReason reason, CancellationToken cancellationToken)
     {
-        await base.OnDeactivateAsync();
         _logger.LogInformation($"Order {_key} deactivated");
+        return Task.CompletedTask;
     }
 
     [Serializable]

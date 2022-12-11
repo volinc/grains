@@ -5,6 +5,6 @@ global using System.Text;
 global using System.Threading.Tasks;
 global using Grains.Interfaces;
 global using Microsoft.Extensions.Logging;
-global using Orleans;
 global using Microsoft.Extensions.Hosting;
+global using Orleans;
 global using Orleans.Runtime;

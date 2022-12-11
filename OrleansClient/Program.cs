@@ -1,31 +1,48 @@
 using OrleansClient;
 
-var builder = WebApplication.CreateBuilder(args);
-
-var connectionString = builder.Configuration.GetConnectionString("Clustering");
-builder.Services.AddClusterClient(connectionString);
-
-builder.Services.AddControllers();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-if (builder.Environment.IsDevelopment())
-    builder.Logging.AddDebug();
-
-builder.Logging.AddConsole();
-
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-var app = builder.Build();
+await Host.CreateDefaultBuilder(args)
+    .UseOrleansClient((ctx, clientBuilder) =>
+    {
+        var connectionString = ctx.Configuration.GetConnectionString("Clustering")
+            ?? "Server=sql;Database=grains;Username=postgres;Password=pass;";
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+        clientBuilder.Configure<ClusterOptions>(options =>
+        {
+            options.ClusterId = Constants.ClusterId;
+            options.ServiceId = Constants.ServiceId;
+        })
+        .UseAdoNetClustering(options =>
+        {
+            options.Invariant = Constants.Invariant;
+            options.ConnectionString = connectionString;
+        });
+    })
+    .ConfigureWebHostDefaults(webBuilder =>
+    {
+        webBuilder.ConfigureServices(services =>
+        {
+            services.AddControllers();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
+        });
+        webBuilder.Configure((ctx, app) =>
+        {
+            if (ctx.HostingEnvironment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
-app.MapControllers();
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
-app.Run();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        });
+    })
+    .RunConsoleAsync();

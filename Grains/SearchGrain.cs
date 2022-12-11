@@ -2,7 +2,7 @@ using System.Threading;
 
 namespace Grains;
 
-public class SearchGrain : Grain, ISearchGrain, IRemindable
+public class SearchGrain : IGrainBase, ISearchGrain, IRemindable
 {
     private const string ReminderName = "search";
     private readonly IHostApplicationLifetime _hostAppLifetime;
@@ -11,11 +11,12 @@ public class SearchGrain : Grain, ISearchGrain, IRemindable
     private readonly IPersistentState<SearchState> _search;
     private Guid _key;
 
-    public SearchGrain(
+    public SearchGrain(IGrainContext grainContext,
         [PersistentState(nameof(SearchGrain))] IPersistentState<SearchState> search,
         ILogger<SearchGrain> logger,
         IHostApplicationLifetime hostAppLifetime)
     {
+        GrainContext = grainContext;
         _search = search;
         _logger = logger;
         _hostAppLifetime = hostAppLifetime;
@@ -23,10 +24,11 @@ public class SearchGrain : Grain, ISearchGrain, IRemindable
 
     private SearchState State => _search.State;
 
-    public override async Task OnActivateAsync()
+    public IGrainContext GrainContext { get; }
+
+    public Task OnActivateAsync(CancellationToken cancellationToken)
     {
         _key = this.GetPrimaryKey();
-        await base.OnActivateAsync();
         _hostAppLifetime.ApplicationStopping.Register(() =>
         {
             _logger.LogInformation($"### Search {_key} graceful shutdown");
@@ -39,12 +41,13 @@ public class SearchGrain : Grain, ISearchGrain, IRemindable
             _logger.LogInformation("Termination delay complete, continuing stopping process");
         });
         _logger.LogInformation($"### Search {_key} activated");
+        return Task.CompletedTask;
     }
 
-    public override async Task OnDeactivateAsync()
+    public Task OnDeactivateAsync(DeactivationReason reason, CancellationToken cancellationToken)
     {
-        await base.OnDeactivateAsync();
         _logger.LogInformation($"### Search {_key} deactivated");
+        return Task.CompletedTask;
     }
 
     public async Task ReceiveReminder(string reminderName, TickStatus status)
@@ -68,7 +71,7 @@ public class SearchGrain : Grain, ISearchGrain, IRemindable
         State.Parameters = parameters;
         State.IsStarted = true;
 
-        await RegisterOrUpdateReminder(ReminderName, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+        await this.RegisterOrUpdateReminder(ReminderName, TimeSpan.Zero, TimeSpan.FromMinutes(1));
         await _search.WriteStateAsync();
 
         await Console.Out.WriteLineAsync($"Value = {State.Value}");
@@ -95,8 +98,8 @@ public class SearchGrain : Grain, ISearchGrain, IRemindable
     {
         if (!State.IsStarted)
         {
-            var reminder = await GetReminder(ReminderName);
-            await UnregisterReminder(reminder);
+            var reminder = await this.GetReminder(ReminderName);
+            await this.UnregisterReminder(reminder);
             return;
         }
 
@@ -107,12 +110,12 @@ public class SearchGrain : Grain, ISearchGrain, IRemindable
     {
         _logger.LogInformation($"### Search 'Timer' start waiting {DateTime.Now} handled");
 
-        RegisterTimer(_ =>
-        {
-            _logger.LogInformation($"### Search 'Timer' end waiting {DateTime.Now} handled");
-
-            return LoopSearchAsync(Loop);
-        }, null, dueTime, TimeSpan.FromMilliseconds(-1));
+        //this.RegisterTimer(_ =>
+        //{
+        //    _logger.LogInformation($"### Search 'Timer' end waiting {DateTime.Now} handled");
+        //
+        //    return LoopSearchAsync(Loop);
+        //}, null, dueTime, TimeSpan.FromMilliseconds(-1));
     }
 
     private async Task LoopSearchAsync(Action<TimeSpan> loop)

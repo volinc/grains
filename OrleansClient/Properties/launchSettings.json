@@ -3,19 +3,19 @@
   "profiles": {
     "OrleansClient": {
       "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "CUSTOMCONNSTR_Clustering": "Server=localhost; Database=grains; Username=postgres; Password=pass;"
-      },
-      "launchBrowser": true,
-      "applicationUrl": "http://localhost:5000",
-      "launchUrl": "swagger"
+      }
     },
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
-      "publishAllPorts": true
+      "environmentVariables": {}
     }
   }
 }

@@ -19,7 +19,7 @@ services:
     networks:
      grains-backend:
       aliases:
-      - orleanshost     
+      - orleanshost  
     
   orleansclient:
     image: ${DOCKER_REGISTRY-}client

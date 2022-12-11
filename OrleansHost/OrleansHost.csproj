@@ -1,30 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">  
-  
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-	<Nullable>enable</Nullable>
-	<ImplicitUsings>enable</ImplicitUsings>
-	<ServerGarbageCollection>true</ServerGarbageCollection>    
+    <TargetFramework>net7.0</TargetFramework>
+	  <Nullable>enable</Nullable>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <ServerGarbageCollection>true</ServerGarbageCollection>    
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>    
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>    
     <OutputType>Exe</OutputType>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Orleans.Client" Version="3.5.1" />
-    <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="3.5.1" />
-    <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.5.1" />
-    <PackageReference Include="Microsoft.Orleans.Reminders.AdoNet" Version="3.5.1" />
-    <PackageReference Include="Microsoft.Orleans.Server" Version="3.5.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-    <PackageReference Include="Npgsql" Version="6.0.2" />        
-  </ItemGroup>
-  
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Orleans.Reminders.AdoNet" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Orleans.Server" Version="7.0.0" />
+    <PackageReference Include="Npgsql" Version="7.0.0" />        
+  </ItemGroup>  
   <ItemGroup>
     <ProjectReference Include="..\Grains\Grains.csproj" />
     <ProjectReference Include="..\Grains.Interfaces\Grains.Interfaces.csproj" />
   </ItemGroup>
-
 </Project>

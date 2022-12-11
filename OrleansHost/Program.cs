@@ -29,7 +29,7 @@ builder.UseOrleans((context, siloBuilder) =>
         {
             options.Invariant = Constants.Invariant;
             options.ConnectionString = connectionString;
-            options.UseJsonFormat = true;
+            //options.UseJsonFormat = true;
         })
         .UseAdoNetClustering(options =>
         {
@@ -41,11 +41,7 @@ builder.UseOrleans((context, siloBuilder) =>
             options.Invariant = Constants.Invariant;
             options.ConnectionString = connectionString;
         })
-        .ConfigureEndpoints(11111, 30000)
-        .ConfigureApplicationParts(parts =>
-        {
-            parts.AddApplicationPart(typeof(OrderGrain).Assembly).WithReferences();
-        });
+        .ConfigureEndpoints(11111, 30000);
 });
 
 builder.Build().Run();
