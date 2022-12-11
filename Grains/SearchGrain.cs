@@ -2,7 +2,7 @@ using System.Threading;
 
 namespace Grains;
 
-public class SearchGrain : IGrainBase, ISearchGrain, IRemindable
+public class SearchGrain : Grain, ISearchGrain, IRemindable
 {
     private const string ReminderName = "search";
     private readonly IHostApplicationLifetime _hostAppLifetime;
@@ -26,7 +26,7 @@ public class SearchGrain : IGrainBase, ISearchGrain, IRemindable
 
     public IGrainContext GrainContext { get; }
 
-    public Task OnActivateAsync(CancellationToken cancellationToken)
+    public override Task OnActivateAsync(CancellationToken cancellationToken)
     {
         _key = this.GetPrimaryKey();
         _hostAppLifetime.ApplicationStopping.Register(() =>
@@ -44,7 +44,7 @@ public class SearchGrain : IGrainBase, ISearchGrain, IRemindable
         return Task.CompletedTask;
     }
 
-    public Task OnDeactivateAsync(DeactivationReason reason, CancellationToken cancellationToken)
+    public override Task OnDeactivateAsync(DeactivationReason reason, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"### Search {_key} deactivated");
         return Task.CompletedTask;
@@ -110,12 +110,12 @@ public class SearchGrain : IGrainBase, ISearchGrain, IRemindable
     {
         _logger.LogInformation($"### Search 'Timer' start waiting {DateTime.Now} handled");
 
-        //this.RegisterTimer(_ =>
-        //{
-        //    _logger.LogInformation($"### Search 'Timer' end waiting {DateTime.Now} handled");
-        //
-        //    return LoopSearchAsync(Loop);
-        //}, null, dueTime, TimeSpan.FromMilliseconds(-1));
+        this.RegisterTimer(_ =>
+        {
+            _logger.LogInformation($"### Search 'Timer' end waiting {DateTime.Now} handled");
+        
+            return LoopSearchAsync(Loop);
+        }, null, dueTime, TimeSpan.FromMilliseconds(-1));
     }
 
     private async Task LoopSearchAsync(Action<TimeSpan> loop)
