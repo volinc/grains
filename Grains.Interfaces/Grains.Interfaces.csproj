@@ -4,8 +4,10 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Microsoft.Orleans.Sdk" />
+    <None Remove="Microsoft.Orleans.Serialization.NewtonsoftJson" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Orleans.Sdk" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Orleans.Serialization.NewtonsoftJson" Version="7.0.0" />
   </ItemGroup>
 </Project>

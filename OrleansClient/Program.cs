@@ -1,3 +1,4 @@
+using Orleans.Hosting;
 using OrleansClient;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

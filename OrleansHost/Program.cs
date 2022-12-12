@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Hosting;
+using Orleans.Serialization;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
@@ -44,6 +45,12 @@ using var host = new HostBuilder()
                 options.ConnectionString = connectionString;
             })
             .ConfigureEndpoints(11111, 30000);
+
+        siloBuilder.Services.AddSerializer(serializerBuilder =>
+        {
+            serializerBuilder.AddNewtonsoftJsonSerializer(
+                isSupported: type => type.Namespace!.StartsWith("Grains.Interfaces"));
+        });
     })
     .Build();
 
