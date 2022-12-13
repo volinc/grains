@@ -8,7 +8,7 @@
       "applicationUrl": "http://localhost:5001",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "CUSTOMCONNSTR_Clustering": "Server=localhost; Database=grains; Username=postgres; Password=pass;"
+        "CUSTOMCONNSTR_Clustering": "Server=sql;Database=grains;Username=postgres;Password=pass;"
       }
     },
     "Docker": {

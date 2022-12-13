@@ -1,13 +1,11 @@
 ﻿using System;
+using Orleans;
 
 namespace Grains.Interfaces;
 
+[GenerateSerializer]
 public class SearchParameters
 {
-    public SearchParameters(DateTimeOffset endAt)
-    {
-        EndAt = endAt;
-    }
-
-    public DateTimeOffset EndAt { get; }
+    [Id(0)]
+    public DateTimeOffset EndAt { get; set; }
 }

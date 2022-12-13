@@ -2,13 +2,17 @@ using Orleans.Hosting;
 using OrleansClient;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+Thread.Sleep(5000);
 
-await Host.CreateDefaultBuilder(args)
+var host = new HostBuilder()
+    .ConfigureHostConfiguration(configurationBuilder =>
+    {
+        configurationBuilder.AddEnvironmentVariables();
+    })
     .UseOrleansClient((ctx, clientBuilder) =>
     {
-        var connectionString = ctx.Configuration.GetConnectionString("Clustering")
-            ?? "Server=sql;Database=grains;Username=postgres;Password=pass;";
-
+        var connectionString = Environment.GetEnvironmentVariable("CUSTOMCONNSTR_Clustering");
+        //var connectionString = context.Configuration.GetValue<string>("CUSTOMCONNSTR_Clustering");
         clientBuilder.Configure<ClusterOptions>(options =>
         {
             options.ClusterId = Constants.ClusterId;
@@ -46,4 +50,6 @@ await Host.CreateDefaultBuilder(args)
             });
         });
     })
-    .RunConsoleAsync();
+    .Build();
+
+await host.RunAsync();

@@ -4,7 +4,7 @@
 2. Create shared network for databases/other services 
 `docker network create --attachable grains-backend --subnet=174.10.1.0/16`
 3. Start databases 
-`docker-compose -f .\docker-compose-standby.yml up -d`
+`docker-compose -f docker-compose-standby.yml up -d`
 
 ## Build and run
 

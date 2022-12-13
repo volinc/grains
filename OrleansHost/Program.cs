@@ -4,25 +4,15 @@ using Orleans.Serialization;
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 using var host = new HostBuilder()
-    .ConfigureLogging((context, logging) =>
+    .ConfigureHostConfiguration(configurationBuilder =>
     {
-        if (context.HostingEnvironment.IsDevelopment())
-            logging.AddDebug();
-
-        logging.AddConsole();
+        configurationBuilder.AddEnvironmentVariables();
     })
-    .ConfigureServices(services =>
+    .UseOrleans((context, silBuilder) =>
     {
-        // https://andrewlock.net/deploying-asp-net-core-applications-to-kubernetes-part-11-avoiding-downtime-in-rolling-deployments-by-blocking-sigterm/
-        services.Configure<HostOptions>(options =>
-        {
-            options.ShutdownTimeout = TimeSpan.FromSeconds(45);
-        });
-    })
-    .UseOrleans((context, siloBuilder) =>
-    {
-        var connectionString = context.Configuration.GetConnectionString("Clustering");
-        siloBuilder
+        var connectionString = Environment.GetEnvironmentVariable("CUSTOMCONNSTR_Clustering");
+        //var connectionString = context.Configuration.GetValue<string>("CUSTOMCONNSTR_Clustering");
+        silBuilder
             .Configure<ClusterOptions>(options =>
             {
                 options.ClusterId = Constants.ClusterId;
@@ -32,7 +22,6 @@ using var host = new HostBuilder()
             {
                 options.Invariant = Constants.Invariant;
                 options.ConnectionString = connectionString;
-                //options.UseJsonFormat = true;
             })
             .UseAdoNetClustering(options =>
             {
@@ -45,12 +34,6 @@ using var host = new HostBuilder()
                 options.ConnectionString = connectionString;
             })
             .ConfigureEndpoints(11111, 30000);
-
-        siloBuilder.Services.AddSerializer(serializerBuilder =>
-        {
-            serializerBuilder.AddNewtonsoftJsonSerializer(
-                isSupported: type => type.Namespace!.StartsWith("Grains.Interfaces"));
-        });
     })
     .Build();
 

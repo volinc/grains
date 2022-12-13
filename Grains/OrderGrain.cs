@@ -8,7 +8,7 @@ public class OrderGrain : IGrainBase, IOrderGrain
     private readonly IHostApplicationLifetime _hostAppLifetime;
     private readonly ILogger<OrderGrain> _logger;
     private readonly IPersistentState<OrderState> _order;
-    private Guid _key;
+    private string _key;
 
     public OrderGrain(IGrainContext grainContext,
         [PersistentState(nameof(OrderGrain))] IPersistentState<OrderState> order,
@@ -27,7 +27,7 @@ public class OrderGrain : IGrainBase, IOrderGrain
 
     public IGrainContext GrainContext { get; }
 
-    public async Task<Guid> CreateAsync()
+    public async Task<string> CreateAsync()
     {
         State.Created = true;
         await _order.WriteStateAsync();
@@ -73,7 +73,10 @@ public class OrderGrain : IGrainBase, IOrderGrain
 
     private static SearchParameters BuildSearchParameters()
     {
-        return new SearchParameters(DateTimeOffset.Now.AddMinutes(4));
+        return new SearchParameters
+        {
+            EndAt = DateTimeOffset.Now.AddMinutes(4)
+        };
     }
 
     private void ThrowIfNotExists()
@@ -84,7 +87,7 @@ public class OrderGrain : IGrainBase, IOrderGrain
 
     public Task OnActivateAsync(CancellationToken cancellationToken)
     {
-        _key = this.GetPrimaryKey();
+        _key = this.GetPrimaryKeyString();
         _hostAppLifetime.ApplicationStopping.Register(() =>
         {
             _order.WriteStateAsync().ConfigureAwait(false).GetAwaiter();

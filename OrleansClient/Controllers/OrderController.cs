@@ -12,42 +12,42 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public Task<Guid> CreateAsync()
+    public Task<string> CreateAsync()
     {
-        var order = _clusterClient.GetGrain<IOrderGrain>(Guid.NewGuid());
+        var order = _clusterClient.GetGrain<IOrderGrain>(Guid.NewGuid().ToString("N"));
         return order.CreateAsync();
     }
 
     [HttpPost("{id}/confirm")]
-    public async Task ConfirmAsync(Guid id)
+    public async Task ConfirmAsync(string id)
     {
         var order = _clusterClient.GetGrain<IOrderGrain>(id);
         await order.StartSearchAsync();
     }
 
     [HttpPost("{id}/cancel")]
-    public async Task CancelAsync(Guid id)
+    public async Task CancelAsync(string id)
     {
         var order = _clusterClient.GetGrain<IOrderGrain>(id);
         await order.StopSearchAsync();
     }
 
     [HttpPost("{id}/accept")]
-    public async Task AcceptAsync(Guid id)
+    public async Task AcceptAsync(string id)
     {
         var order = _clusterClient.GetGrain<IOrderGrain>(id);
         await order.StopSearchAsync();
     }
 
     [HttpGet("{id}/search-value")]
-    public async Task<long> GetSearchValueAsync(Guid id)
+    public async Task<long> GetSearchValueAsync(string id)
     {
         var order = _clusterClient.GetGrain<IOrderGrain>(id);
         return await order.GetSearchValueAsync();
     }
 
     [HttpPost("{id}/stop-process")]
-    public Task StopProcessAsync(Guid id)
+    public Task StopProcessAsync(string id)
     {
         var order = _clusterClient.GetGrain<IOrderGrain>(id);
         order.StopProcessAsync().Ignore();

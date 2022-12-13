@@ -4,9 +4,9 @@ using Orleans;
 
 namespace Grains.Interfaces;
 
-public interface IOrderGrain : IGrainWithGuidKey
+public interface IOrderGrain : IGrainWithStringKey
 {
-    Task<Guid> CreateAsync();
+    Task<string> CreateAsync();
     Task StartSearchAsync();
     Task StopSearchAsync();
     Task<long> GetSearchValueAsync();

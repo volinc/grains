@@ -9,7 +9,7 @@ public class SearchGrain : Grain, ISearchGrain, IRemindable
     private readonly ILogger _logger;
 
     private readonly IPersistentState<SearchState> _search;
-    private Guid _key;
+    private string _key;
 
     public SearchGrain(IGrainContext grainContext,
         [PersistentState(nameof(SearchGrain))] IPersistentState<SearchState> search,
@@ -28,7 +28,7 @@ public class SearchGrain : Grain, ISearchGrain, IRemindable
 
     public override Task OnActivateAsync(CancellationToken cancellationToken)
     {
-        _key = this.GetPrimaryKey();
+        _key = this.GetPrimaryKeyString();
         _hostAppLifetime.ApplicationStopping.Register(() =>
         {
             _logger.LogInformation($"### Search {_key} graceful shutdown");
