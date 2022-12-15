@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">  
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-	  <Nullable>enable</Nullable>
-	  <ImplicitUsings>enable</ImplicitUsings>
-	  <ServerGarbageCollection>true</ServerGarbageCollection>    
+	<Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<ServerGarbageCollection>true</ServerGarbageCollection>
+    <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>    
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>    
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>    
     <OutputType>Exe</OutputType>

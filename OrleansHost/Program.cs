@@ -1,29 +1,22 @@
-using Microsoft.Extensions.Hosting;
-using Orleans.Serialization;
-
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-using var host = new HostBuilder()
-    .ConfigureHostConfiguration(configurationBuilder =>
+var hostBuilder = Host.CreateDefaultBuilder(args)
+    .UseOrleans((context, siloBuilder) =>
     {
-        configurationBuilder.AddEnvironmentVariables();
-    })
-    .UseOrleans((context, silBuilder) =>
-    {
-        var connectionString = Environment.GetEnvironmentVariable("CUSTOMCONNSTR_Clustering");
-        //var connectionString = context.Configuration.GetValue<string>("CUSTOMCONNSTR_Clustering");
-        silBuilder
+        var connectionString = context.Configuration.GetConnectionString("Clustering");
+
+        siloBuilder
             .Configure<ClusterOptions>(options =>
             {
                 options.ClusterId = Constants.ClusterId;
                 options.ServiceId = Constants.ServiceId;
             })
-            .AddAdoNetGrainStorageAsDefault(options =>
+            .UseAdoNetClustering(options =>
             {
                 options.Invariant = Constants.Invariant;
                 options.ConnectionString = connectionString;
             })
-            .UseAdoNetClustering(options =>
+            .AddAdoNetGrainStorageAsDefault(options =>
             {
                 options.Invariant = Constants.Invariant;
                 options.ConnectionString = connectionString;
@@ -33,8 +26,14 @@ using var host = new HostBuilder()
                 options.Invariant = Constants.Invariant;
                 options.ConnectionString = connectionString;
             })
-            .ConfigureEndpoints(11111, 30000);
-    })
-    .Build();
+            .ConfigureEndpoints(11111, 30000)
+            .ConfigureLogging(builder => builder.SetMinimumLevel(LogLevel.Debug).AddConsole());
 
-await host.RunAsync();
+        //siloBuilder.Services.AddSerializer(serializerBuilder =>
+        //{
+        //    serializerBuilder.AddNewtonsoftJsonSerializer(
+        //        isSupported: type => type.Namespace!.StartsWith("System"));
+        //});
+    });
+
+await hostBuilder.RunConsoleAsync();

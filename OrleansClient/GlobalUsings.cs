@@ -7,4 +7,5 @@ global using Grains.Interfaces;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Orleans.Configuration;
+global using Orleans.Runtime;
 global using Microsoft.AspNetCore.Mvc;

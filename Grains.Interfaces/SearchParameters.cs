@@ -3,8 +3,8 @@ using Orleans;
 
 namespace Grains.Interfaces;
 
-[GenerateSerializer]
-public class SearchParameters
+[Immutable, GenerateSerializer]
+public sealed class SearchParameters
 {
     [Id(0)]
     public DateTimeOffset EndAt { get; set; }

@@ -14,9 +14,16 @@
     <PackageReference Include="Microsoft.Orleans.Reminders.AdoNet" Version="7.0.0" />
     <PackageReference Include="Npgsql" Version="7.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Microsoft.Orleans.Server" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Grains.Interfaces\Grains.Interfaces.csproj" />
-    <ProjectReference Include="..\Grains.Interfaces\Grains.Interfaces.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Microsoft.Orleans.Server" />
+    <None Remove="Grains\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Grains\" />
   </ItemGroup>
 </Project>

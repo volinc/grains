@@ -8,4 +8,5 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Logging;
 global using Orleans.Configuration;
+global using Orleans.Serialization;
 global using Grains.Interfaces;
