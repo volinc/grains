@@ -2,28 +2,28 @@ namespace OrleansClient.Controllers;
 
 [Route("customers")]
 [ApiController]
-public class CustomersController : ControllerBase
+public class OrdersController : ControllerBase
 {
     private readonly IClusterClient _clusterClient;
 
-    public CustomersController(IClusterClient clusterClient)
+    public OrdersController(IClusterClient clusterClient)
     {
         _clusterClient = clusterClient;
     }
 
-    [HttpPost("{customerId}")]
-    public async Task<string> CreateAsync(string customerId)
+    [HttpPost("{customerId}/orders")]
+    public async Task CreateOrderAsync(string customerId)
     {
         var customer = _clusterClient.GetGrain<ICustomerGrain>(customerId);
-        return await customer.GetNameAsync();
+        await customer.CreateOrderAsync();
     }
 
-    //[HttpPost]
-    //public Task<string> CreateAsync()
-    //{
-    //    var order = _clusterClient.GetGrain<IOrderGrain>(Guid.NewGuid().ToString("N"));
-    //    return order.CreateAsync();
-    //}
+    [HttpGet("{customerId}/orders")]
+    public async Task<List<string>> GetActiveOrdersAsync(string customerId)
+    {
+        var customer = _clusterClient.GetGrain<ICustomerGrain>(customerId);
+        return await customer.GetActiveOrders();
+    }
 
     //[HttpPost("{id}/confirm")]
     //public async Task ConfirmAsync(string id)
