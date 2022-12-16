@@ -14,8 +14,15 @@ public class OrdersController : ControllerBase
     [HttpPost("{customerId}/orders")]
     public async Task CreateOrderAsync(string customerId)
     {
-        var customer = _clusterClient.GetGrain<ICustomerGrain>(customerId);
-        await customer.CreateOrderAsync();
+        try
+        {
+            var customer = _clusterClient.GetGrain<ICustomerGrain>(customerId);
+            await customer.CreateOrderAsync();
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine(exception);
+        }
     }
 
     [HttpGet("{customerId}/orders")]
@@ -25,32 +32,32 @@ public class OrdersController : ControllerBase
         return await customer.GetActiveOrders();
     }
 
-    //[HttpPost("{id}/confirm")]
-    //public async Task ConfirmAsync(string id)
-    //{
-    //    var order = _clusterClient.GetGrain<IOrderGrain>(id);
-    //    await order.StartSearchAsync();
-    //}
+    [HttpPost("{customerId}/orders/{orderId}/start-search")]
+    public async Task ConfirmAsync(string customerId, string orderId)
+    {
+        var order = _clusterClient.GetGrain<ICustomerGrain>(customerId);
+        await order.StartSearchAsync(orderId);
+    }
+
+    [HttpPost("{customerId}/orders/{orderId}/stop-search")]
+    public async Task AcceptAsync(string customerId, string orderId)
+    {
+        var order = _clusterClient.GetGrain<ICustomerGrain>(customerId);
+        await order.StopSearchAsync(orderId);
+    }
+
+    [HttpGet("{customerId}/orders/{orderId}/search-value")]
+    public async Task<long> GetSearchValueAsync(string customerId, string orderId)
+    {
+        var order = _clusterClient.GetGrain<ICustomerGrain>(customerId);
+        return await order.GetSearchValueAsync(orderId);
+    }
 
     //[HttpPost("{id}/cancel")]
     //public async Task CancelAsync(string id)
     //{
     //    var order = _clusterClient.GetGrain<IOrderGrain>(id);
     //    await order.StopSearchAsync();
-    //}
-
-    //[HttpPost("{id}/accept")]
-    //public async Task AcceptAsync(string id)
-    //{
-    //    var order = _clusterClient.GetGrain<IOrderGrain>(id);
-    //    await order.StopSearchAsync();
-    //}
-
-    //[HttpGet("{id}/search-value")]
-    //public async Task<long> GetSearchValueAsync(string id)
-    //{
-    //    var order = _clusterClient.GetGrain<IOrderGrain>(id);
-    //    return await order.GetSearchValueAsync();
     //}
 
     //[HttpPost("{id}/stop-process")]

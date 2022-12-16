@@ -25,12 +25,11 @@ public class OrderGrain : IGrainBase, IOrderGrain
 
     public IGrainContext GrainContext { get; }
 
-    public async Task<string> CreateAsync()
+    public async Task SetCreatedAsync()
     {
         State.Created = true;
         await _order.WriteStateAsync();
         _logger.LogInformation($"Order {_key} created");
-        return _key;
     }
 
     public async Task StartSearchAsync()
@@ -100,9 +99,11 @@ public class OrderGrain : IGrainBase, IOrderGrain
         return Task.CompletedTask;
     }
 
-    [Serializable]
-    public class OrderState
+    [Alias("Order")]
+    [Immutable, GenerateSerializer]
+    public sealed class OrderState
     {
+        [Id(0)]
         public bool Created { get; set; }
     }
 }

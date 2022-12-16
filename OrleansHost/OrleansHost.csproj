@@ -22,4 +22,7 @@
     <ProjectReference Include="..\Grains\Grains.csproj" />
     <ProjectReference Include="..\Grains.Interfaces\Grains.Interfaces.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="OrleansDashboard" />
+  </ItemGroup>
 </Project>

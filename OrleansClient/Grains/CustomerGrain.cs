@@ -15,17 +15,44 @@ public class CustomerGrain : Grain, ICustomerGrain
         return Task.FromResult(key);
     }
 
-    public Task CreateOrderAsync()
+    public async Task CreateOrderAsync()
     {
         var orderId = Guid.NewGuid().ToString("N").ToLowerInvariant();
-        GrainFactory.GetGrain<IOrderGrain>(orderId);
+        var orderGrain = GrainFactory.GetGrain<IOrderGrain>(orderId);
+        await orderGrain.SetCreatedAsync();
         activeOrders.Add(orderId);
-        return Task.CompletedTask;
     }
 
     public Task<List<string>> GetActiveOrders()
     {
         return Task.FromResult(activeOrders);
+    }
+
+    public async Task StartSearchAsync(string orderId)
+    {
+        if (!activeOrders.Contains(orderId))
+            throw new EntityNotFoundException();
+
+        var orderGrain = GrainFactory.GetGrain<IOrderGrain>(orderId);
+        await orderGrain.StartSearchAsync();
+    }
+
+    public async Task StopSearchAsync(string orderId)
+    {
+        if (!activeOrders.Contains(orderId))
+            throw new EntityNotFoundException();
+
+        var orderGrain = GrainFactory.GetGrain<IOrderGrain>(orderId);
+        await orderGrain.StopSearchAsync();
+    }
+
+    public async Task<long> GetSearchValueAsync(string orderId)
+    {
+        if (!activeOrders.Contains(orderId))
+            throw new EntityNotFoundException();
+
+        var orderGrain = GrainFactory.GetGrain<IOrderGrain>(orderId);
+        return await orderGrain.GetSearchValueAsync();
     }
 
     private List<string> activeOrders = new List<string>();

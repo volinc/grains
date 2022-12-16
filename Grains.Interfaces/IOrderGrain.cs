@@ -1,12 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Orleans;
-
-namespace Grains.Interfaces;
+﻿namespace Grains.Interfaces;
 
 public interface IOrderGrain : IGrainWithStringKey
 {
-    Task<string> CreateAsync();
+    Task SetCreatedAsync();
     Task StartSearchAsync();
     Task StopSearchAsync();
     Task<long> GetSearchValueAsync();
