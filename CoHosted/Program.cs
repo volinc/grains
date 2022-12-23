@@ -5,13 +5,15 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var hostBuilder = Host.CreateDefaultBuilder(args)
     .UseOrleans((context, siloBuilder) =>
     {
-        var connectionString = context.Configuration.GetConnectionString("Clustering");
-        var instanceId = context.Configuration.GetValue<int>("InstanceId");
-        
+        var clusterId = context.Configuration.GetValue<string>(Constants.ClusterIdKey);
+        var serviceId = context.Configuration.GetValue<string>(Constants.ServiceIdKey);
+        var connectionString = context.Configuration.GetConnectionString(Constants.ConnectionStringKey);
+        var isKubernetesHosting = context.Configuration.GetValue<bool>(Constants.IsKubernetesHostingKey);
+
         siloBuilder.Configure<ClusterOptions>(options =>
         {
-            options.ClusterId = Constants.ClusterId;
-            options.ServiceId = Constants.ServiceId;
+            options.ClusterId = clusterId;
+            options.ServiceId = serviceId;
         })
         .UseAdoNetClustering(options =>
         {
@@ -28,8 +30,11 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
             options.Invariant = Constants.Invariant;
             options.ConnectionString = connectionString;
         })
-        .ConfigureEndpoints(siloPort: 11111 + instanceId, gatewayPort: 30000 + instanceId)
+        .ConfigureEndpoints(siloPort: 11112, gatewayPort: 30001)
         .ConfigureLogging(builder => builder.SetMinimumLevel(LogLevel.Debug).AddConsole());
+
+        if (isKubernetesHosting)
+            siloBuilder.UseKubernetesHosting();
     })
     .ConfigureWebHostDefaults(webBuilder =>
     {

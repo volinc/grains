@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: selfhosted
+  namespace: local
+data:
+  POD_NAME: selfhosted
+  POD_NAMESPACE: local
+  # POD_IP: 192.168.0.1
+  ORLEANS_SERVICE_ID: selfhosted
+  # ORLEANS_CLUSTER_ID: local

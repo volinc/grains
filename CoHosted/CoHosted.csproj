@@ -8,14 +8,16 @@
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <UserSecretsId>c0af3704-b7e2-4f05-8d75-cc17b196a0e8</UserSecretsId>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'OrleansClient' " />
   <ItemGroup>
     <PackageReference Include="Microsoft.Orleans.Client" Version="7.0.0" />
     <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="7.0.0" />
     <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="7.0.0" />
     <PackageReference Include="Microsoft.Orleans.Reminders.AdoNet" Version="7.0.0" />
-    <PackageReference Include="Npgsql" Version="7.0.0" />
+    <PackageReference Include="Npgsql" Version="7.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="Microsoft.Orleans.Server" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Orleans.Hosting.Kubernetes" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Grains.Interfaces\Grains.Interfaces.csproj" />
@@ -23,7 +25,7 @@
   <ItemGroup>
     <None Remove="Microsoft.Orleans.Server" />
     <None Remove="Grains\" />
-    <None Remove="OrleansDashboard" />
+    <None Remove="Microsoft.Orleans.Hosting.Kubernetes" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Grains\" />

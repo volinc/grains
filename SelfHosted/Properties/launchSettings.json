@@ -1,10 +1,10 @@
 {
   "profiles": {
-    "OrleansHost": {
+    "SelfHosted": {
       "commandName": "Project",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
-        "CUSTOMCONNSTR_Clustering": "Server=localhost; Database=grains; Username=postgres; Password=pass;"
+        "CUSTOMCONNSTR_CLUSTERING": "Server=localhost;Database=grains;Username=postgres;Password=pass;"
       }
     },
     "Docker": {

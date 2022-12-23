@@ -1,4 +1,4 @@
-namespace OrleansClient.Controllers;
+namespace CoHosted.Controllers;
 
 [Route("customers")]
 [ApiController]

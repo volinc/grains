@@ -3,20 +3,22 @@
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
+EXPOSE 11112
+EXPOSE 30001
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["OrleansClient/OrleansClient.csproj", "OrleansClient/"]
+COPY ["CoHosted/CoHosted.csproj", "CoHosted/"]
 COPY ["Grains.Interfaces/Grains.Interfaces.csproj", "Grains.Interfaces/"]
-RUN dotnet restore "OrleansClient/OrleansClient.csproj"
+RUN dotnet restore "CoHosted/CoHosted.csproj"
 COPY . .
-WORKDIR "/src/OrleansClient"
-RUN dotnet build "OrleansClient.csproj" -c Release -o /app/build
+WORKDIR "/src/CoHosted"
+RUN dotnet build "CoHosted.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "OrleansClient.csproj" -c Release -o /app/publish
+RUN dotnet publish "CoHosted.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "OrleansClient.dll"]
+ENTRYPOINT ["dotnet", "CoHosted.dll"]

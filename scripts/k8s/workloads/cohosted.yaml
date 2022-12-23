@@ -1,0 +1,121 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: cohosted
+  name: cohosted
+  namespace: local
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: cohosted
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        orleans/clusterId: local
+        orleans/serviceId: cohosted
+        app: cohosted
+    spec:
+      containers:
+        - env:
+          - name: ORLEANS_SERVICE_ID
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['orleans/serviceId']
+          - name: ORLEANS_CLUSTER_ID
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['orleans/clusterId']
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          envFrom:
+            - configMapRef:
+                name: general
+            - configMapRef:
+                name: cohosted
+          image: image/image
+          imagePullPolicy: IfNotPresent
+          name: cohosted
+          args:
+            - dotnet
+            - "Taxys.Aggregator/Taxys.Aggregator.dll"
+          ports:
+            - containerPort: 80
+              name: 80tcp
+              protocol: TCP
+            - containerPort: 30001
+              name: 30001tcp2
+              protocol: TCP
+            - containerPort: 11112
+              name: 11112tcp2
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            successThreshold: 2
+            timeoutSeconds: 2
+          resources: { }
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { }
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          stdin: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: true
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: rapporttaxys
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: { }
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cohosted
+  namespace: local
+spec:
+  ports:
+    - name: 80tcp2-cohosted
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    - name: 30001tcp2-cohosted
+      port: 30001
+      protocol: TCP
+      targetPort: 30001
+    - name: 11112tcp2-cohosted
+      port: 11112
+      protocol: TCP
+      targetPort: 11112
+  selector:
+    app: cohosted
+  sessionAffinity: None
+  type: ClusterIP

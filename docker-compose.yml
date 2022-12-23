@@ -5,13 +5,13 @@ networks:
     external: true
 
 services:   
-  orleanshost:
-    image: ${DOCKER_REGISTRY-}host
+  selfhosted:
+    image: ${DOCKER_REGISTRY-}server
     build:
       context: .
-      dockerfile: OrleansHost/Dockerfile    
+      dockerfile: SelfHosted/Dockerfile    
     env_file:
-      - OrleansHost/orleanshost.local.env
+      - SelfHosted/selfhosted.local.env
     restart: on-failure
     ports:
       - "11111:11111"
@@ -19,19 +19,21 @@ services:
     networks:
      grains-backend:
       aliases:
-      - orleanshost  
+      - selfhosted  
     
-  orleansclient:
+  cohosted:
     image: ${DOCKER_REGISTRY-}client
     build:
       context: .
-      dockerfile: OrleansClient/Dockerfile
+      dockerfile: CoHosted/Dockerfile
     env_file:
-      - OrleansClient/orleansclient.local.env
+      - CoHosted/cohosted.local.env
     depends_on:      
-      - orleanshost
+      - selfhosted
     restart: on-failure
     ports:
       - "5001:80"
+      - "11112:11112"
+      - "30001:30001"
     networks:
       - grains-backend      

@@ -1,4 +1,4 @@
-﻿namespace Grains;
+﻿namespace CoHosted.Grains;
 
 public class CustomerGrain : Grain, ICustomerGrain
 {

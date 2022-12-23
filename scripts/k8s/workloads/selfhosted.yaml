@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: selfhosted
+  name: selfhosted
+  namespace: local
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: selfhosted
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        orleans/clusterId: local
+        orleans/serviceId: selfhosted
+        app: selfhosted
+    spec:
+      containers:
+        - env:
+            - name: ORLEANS_SERVICE_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['orleans/serviceId']
+            - name: ORLEANS_CLUSTER_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['orleans/clusterId']
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: DOTNET_SHUTDOWNTIMEOUTSECONDS
+              value: "120"
+            - name: IS_KUBERNETES_ORLEANS_HOSTING
+              value: "true"
+          envFrom:
+            - configMapRef:
+                name: general
+            - configMapRef:
+                name: selfhosted
+          image: image/image
+          imagePullPolicy: IfNotPresent
+          args:
+            - dotnet
+            - "Taxys.Orleans.SelfHosted/Taxys.Orleans.SelfHosted.dll"
+          name: selfhosted
+          ports:
+            - containerPort: 80
+              name: 80tcp2
+              protocol: TCP
+            - containerPort: 30000
+              name: 30000tcp2
+              protocol: TCP
+            - containerPort: 11111
+              name: 11111tcp2
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 30
+            initialDelaySeconds: 10
+            periodSeconds: 3
+            successThreshold: 2
+            tcpSocket:
+              port: 30000
+            timeoutSeconds: 15
+          resources: { }
+          securityContext:
+            allowPrivilegeEscalation: true
+            privileged: true
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          stdin: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: true
+      dnsConfig: { }
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: rapporttaxys
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: { }
+      terminationGracePeriodSeconds: 90
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: selfhosted
+  namespace: local
+spec:
+  ports:
+    - name: 80tcp2-selfthosted
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    - name: 30000tcp2-selfthosted
+      port: 30000
+      protocol: TCP
+      targetPort: 30000
+    - name: 11111tcp2-selfthosted
+      port: 11111
+      protocol: TCP
+      targetPort: 11111
+  selector:
+    app: selfhosted
+  sessionAffinity: None
+  type: ClusterIP
