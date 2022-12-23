@@ -1,8 +1,9 @@
+using Microsoft.Extensions.Hosting;
 using Orleans.Serialization;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-var hostBuilder = Host.CreateDefaultBuilder(args)
+var host = Host.CreateDefaultBuilder(args)
     .UseOrleans((context, siloBuilder) =>
     {
         var clusterId = context.Configuration.GetValue<string>(Constants.ClusterIdKey);
@@ -56,6 +57,7 @@ var hostBuilder = Host.CreateDefaultBuilder(args)
                 endpoints.MapControllers();
             });
         });
-    });
+    })
+    .Build();
 
-await hostBuilder.RunConsoleAsync();
+await host.RunAsync();
