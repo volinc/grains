@@ -1,0 +1,64 @@
+apiVersion: apps/v
+kind: Deployment
+metadata:
+  namespace: grains
+  labels:
+    app: postgres
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - grains
+      containers:
+        - name: postgres
+          args: ["-c", "shared_buffers=3GB", "-c", "max_connections=1000"]
+          env:
+            - name: POSTGRES_DB
+              value: grains
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgres-password
+                  name: postgres-secrets
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  key: postgres-user
+                  name: postgres-secrets
+          image: postgis/postgis:14-3.3-alpine
+          ports:
+            - containerPort: 5432
+          resources: { }
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-claim0
+              readOnly: false
+            - mountPath: /dev/shm
+              name: dshm
+      restartPolicy: Always
+      volumes:
+        - name: postgres-claim0
+          hostPath:
+            path: /data/k8s/grains/postgresdb
+            type: DirectoryOrCreate
+        - name: dshm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 2Gi

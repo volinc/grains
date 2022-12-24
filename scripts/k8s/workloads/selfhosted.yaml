@@ -4,7 +4,7 @@ metadata:
   labels:
     app: selfhosted
   name: selfhosted
-  namespace: local
+  namespace: grains
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       labels:
-        orleans/clusterId: local
+        orleans/clusterId: grains
         orleans/serviceId: selfhosted
         app: selfhosted
     spec:
@@ -89,7 +89,7 @@ spec:
       dnsConfig: { }
       dnsPolicy: ClusterFirst
       imagePullSecrets:
-        - name: rapporttaxys
+        - name: ???
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: { }
@@ -99,7 +99,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: selfhosted
-  namespace: local
+  namespace: grains
 spec:
   ports:
     - name: 30001tcp2-selfthosted

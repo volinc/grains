@@ -2,10 +2,10 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cohosted
-  namespace: local
+  namespace: grains
 data:
   POD_NAME: 'cohosted'
-  POD_NAMESPACE: 'local'
+  POD_NAMESPACE: 'grains'
   # POD_IP: '174.10.0.12'
   ORLEANS_SERVICE_ID: 'cohosted'
   ASPNETCORE_ENVIRONMENT: Development

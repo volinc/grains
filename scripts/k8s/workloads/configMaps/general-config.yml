@@ -2,9 +2,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: general
-  namespace: local
+  namespace: grains
 data:
   ORLEANS_IS_KUBERNETES_HOSTING: 'false'
   CUSTOMCONNSTR_CLUSTERING: 'Server=sql;Database=grains;Username=postgres;Password=pass;'
-  ORLEANS_CLUSTER_ID: 'local'
+  ORLEANS_CLUSTER_ID: 'grains'
   IS_KUBERNETES_ORLEANS_HOSTING: 'true'
