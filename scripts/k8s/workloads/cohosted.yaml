@@ -63,19 +63,24 @@ spec:
             - containerPort: 5001
               name: 5001tcp
               protocol: TCP
+            - containerPort: 30002
+              name: 30002tcp2
+              protocol: TCP
             - containerPort: 11112
               name: 11112tcp2
               protocol: TCP
           readinessProbe:
-            failureThreshold: 3
+            failureThreshold: 30
             httpGet:
               path: /health
               port: 5001
               scheme: HTTP
             initialDelaySeconds: 10
-            periodSeconds: 2
+            periodSeconds: 3
             successThreshold: 2
-            timeoutSeconds: 2
+            tcpSocket:
+              port: 30001
+            timeoutSeconds: 15
           resources: { }
           securityContext:
             allowPrivilegeEscalation: false
@@ -106,6 +111,10 @@ spec:
       port: 5001
       protocol: TCP
       targetPort: 5001
+    - name: 30002tcp2-selfthosted
+      port: 30002
+      protocol: TCP
+      targetPort: 30002
     - name: 11112tcp2-cohosted
       port: 11112
       protocol: TCP
