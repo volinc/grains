@@ -44,6 +44,7 @@ try
             webBuilder.ConfigureServices(services =>
             {
                 services.AddControllers();
+                services.AddHealthChecks();
                 services.AddEndpointsApiExplorer();
                 services.AddSwaggerGen();
             })
@@ -55,6 +56,7 @@ try
                 app.UseRouting();
                 app.UseEndpoints(endpoints =>
                 {
+                    endpoints.MapHealthChecks("health");
                     endpoints.MapControllers();
                 });
             });
