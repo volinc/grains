@@ -33,7 +33,7 @@ services:
     restart: on-failure
     ports:
       - "5001:80"
-      - "11112:11112"
-      - "30001:30001"
+      - "21111:21111"
+      - "40000:40000"
     networks:
       - grains-backend      
