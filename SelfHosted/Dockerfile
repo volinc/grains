@@ -1,7 +1,6 @@
 FROM mcr.microsoft.com/dotnet/runtime:7.0 AS base
 WORKDIR /app
 EXPOSE 11111
-EXPOSE 30001
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src

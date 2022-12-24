@@ -1,32 +1,34 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-	  <Nullable>enable</Nullable>
-	  <ImplicitUsings>enable</ImplicitUsings>
-    <ServerGarbageCollection>true</ServerGarbageCollection>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
-    <UserSecretsId>c0af3704-b7e2-4f05-8d75-cc17b196a0e8</UserSecretsId>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.Orleans.Client" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Microsoft.Orleans.Server" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Orleans.Hosting.Kubernetes" Version="7.0.0" />
     <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="7.0.0" />
     <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="7.0.0" />
     <PackageReference Include="Microsoft.Orleans.Reminders.AdoNet" Version="7.0.0" />
     <PackageReference Include="Npgsql" Version="7.0.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-    <PackageReference Include="Microsoft.Orleans.Server" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Orleans.Hosting.Kubernetes" Version="7.0.0" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Grains.Interfaces\Grains.Interfaces.csproj" />
-  </ItemGroup>
+
   <ItemGroup>
     <None Remove="Microsoft.Orleans.Server" />
-    <None Remove="Grains\" />
     <None Remove="Microsoft.Orleans.Hosting.Kubernetes" />
+    <None Remove="Microsoft.Orleans.Persistence.AdoNet" />
+    <None Remove="Microsoft.Orleans.Reminders.AdoNet" />
+    <None Remove="Npgsql" />
+    <None Remove="Microsoft.Orleans.Clustering.AdoNet" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Grains\" />
+    <ProjectReference Include="..\Grains.Interfaces\Grains.Interfaces.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 </Project>

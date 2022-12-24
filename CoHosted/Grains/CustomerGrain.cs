@@ -1,4 +1,7 @@
-﻿namespace CoHosted.Grains;
+﻿using Grains.Interfaces;
+using Orleans.Runtime;
+
+namespace CoHosted.Grains;
 
 public class CustomerGrain : Grain, ICustomerGrain
 {
