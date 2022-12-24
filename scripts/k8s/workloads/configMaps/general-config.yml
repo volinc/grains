@@ -4,5 +4,7 @@ metadata:
   name: general
   namespace: local
 data:
-  ORLEANS_CLUSTER_ID: local
-  IS_KUBERNETES_ORLEANS_HOSTING: "true"
+  ORLEANS_IS_KUBERNETES_HOSTING: 'false'
+  CUSTOMCONNSTR_CLUSTERING: 'Server=sql;Database=grains;Username=postgres;Password=pass;'
+  ORLEANS_CLUSTER_ID: 'local'
+  IS_KUBERNETES_ORLEANS_HOSTING: 'true'

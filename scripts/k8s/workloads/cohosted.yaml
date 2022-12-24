@@ -56,13 +56,10 @@ spec:
           name: cohosted
           args:
             - dotnet
-            - "Taxys.Aggregator/Taxys.Aggregator.dll"
+            - "CoHosted/CoHosted.dll"
           ports:
-            - containerPort: 80
-              name: 80tcp
-              protocol: TCP
-            - containerPort: 30001
-              name: 30001tcp2
+            - containerPort: 5001
+              name: 5001tcp
               protocol: TCP
             - containerPort: 11112
               name: 11112tcp2
@@ -71,7 +68,7 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /health
-              port: 80
+              port: 5001
               scheme: HTTP
             initialDelaySeconds: 10
             periodSeconds: 2
@@ -103,14 +100,10 @@ metadata:
   namespace: local
 spec:
   ports:
-    - name: 80tcp2-cohosted
-      port: 80
+    - name: 5001tcp2-cohosted
+      port: 5001
       protocol: TCP
-      targetPort: 80
-    - name: 30001tcp2-cohosted
-      port: 30001
-      protocol: TCP
-      targetPort: 30001
+      targetPort: 5001
     - name: 11112tcp2-cohosted
       port: 11112
       protocol: TCP

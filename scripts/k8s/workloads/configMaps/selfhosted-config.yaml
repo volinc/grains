@@ -4,8 +4,8 @@ metadata:
   name: selfhosted
   namespace: local
 data:
-  POD_NAME: selfhosted
-  POD_NAMESPACE: local
-  # POD_IP: 192.168.0.1
-  ORLEANS_SERVICE_ID: selfhosted
-  # ORLEANS_CLUSTER_ID: local
+  POD_NAME: 'selfhosted'
+  POD_NAMESPACE: 'local'
+  # POD_IP: '174.10.0.11'
+  ORLEANS_SERVICE_ID: 'selfhosted'
+  DOTNET_ENVIRONMENT: Development
