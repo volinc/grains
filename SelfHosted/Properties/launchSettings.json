@@ -1,12 +1,5 @@
 {
   "profiles": {
-    "SelfHosted": {
-      "commandName": "Project",
-      "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development",
-        "CUSTOMCONNSTR_CLUSTERING": "Server=localhost;Database=grains;Username=postgres;Password=pass;"
-      }
-    },
     "Docker": {
       "commandName": "Docker"
     }

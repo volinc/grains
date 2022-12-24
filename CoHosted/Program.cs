@@ -31,7 +31,7 @@ try
                 options.ConnectionString = connectionString;
             })
             .ConfigureEndpoints(siloPort: 11112, gatewayPort: 30002)
-            .ConfigureLogging(builder => builder.SetMinimumLevel(LogLevel.Debug).AddConsole());
+            .ConfigureLogging(builder => builder.SetMinimumLevel(LogLevel.Information).AddConsole());
 
             if (isKubernetesHosting)
                 siloBuilder.UseKubernetesHosting();

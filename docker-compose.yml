@@ -17,9 +17,7 @@ services:
       - "11111:11111"
       - "30001:30001"
     networks:
-     grains-backend:
-      aliases:
-      - selfhosted  
+      - grains-backend
     
   cohosted:
     image: ${DOCKER_REGISTRY-}cohosted
