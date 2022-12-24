@@ -46,6 +46,8 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
+          - name: IS_KUBERNETES_ORLEANS_HOSTING
+            value: "true"
           envFrom:
             - configMapRef:
                 name: general

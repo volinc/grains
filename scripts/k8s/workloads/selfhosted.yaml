@@ -46,10 +46,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-            - name: DOTNET_SHUTDOWNTIMEOUTSECONDS
-              value: "120"
             - name: IS_KUBERNETES_ORLEANS_HOSTING
               value: "true"
+            - name: DOTNET_SHUTDOWNTIMEOUTSECONDS
+              value: "120"
           envFrom:
             - configMapRef:
                 name: general
@@ -59,12 +59,9 @@ spec:
           imagePullPolicy: IfNotPresent
           args:
             - dotnet
-            - "Taxys.Orleans.SelfHosted/Taxys.Orleans.SelfHosted.dll"
+            - "SelfHosted/SelfHosted.dll"
           name: selfhosted
           ports:
-            - containerPort: 80
-              name: 80tcp2
-              protocol: TCP
             - containerPort: 30000
               name: 30000tcp2
               protocol: TCP
@@ -105,10 +102,6 @@ metadata:
   namespace: local
 spec:
   ports:
-    - name: 80tcp2-selfthosted
-      port: 80
-      protocol: TCP
-      targetPort: 80
     - name: 30000tcp2-selfthosted
       port: 30000
       protocol: TCP
