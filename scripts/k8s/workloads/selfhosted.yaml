@@ -62,8 +62,8 @@ spec:
             - "SelfHosted/SelfHosted.dll"
           name: selfhosted
           ports:
-            - containerPort: 30000
-              name: 30000tcp2
+            - containerPort: 30001
+              name: 30001tcp2
               protocol: TCP
             - containerPort: 11111
               name: 11111tcp2
@@ -74,7 +74,7 @@ spec:
             periodSeconds: 3
             successThreshold: 2
             tcpSocket:
-              port: 30000
+              port: 30001
             timeoutSeconds: 15
           resources: { }
           securityContext:
@@ -102,10 +102,10 @@ metadata:
   namespace: local
 spec:
   ports:
-    - name: 30000tcp2-selfthosted
-      port: 30000
+    - name: 30001tcp2-selfthosted
+      port: 30001
       protocol: TCP
-      targetPort: 30000
+      targetPort: 30001
     - name: 11111tcp2-selfthosted
       port: 11111
       protocol: TCP
