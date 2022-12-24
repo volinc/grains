@@ -30,7 +30,7 @@ try
                 options.Invariant = Constants.Invariant;
                 options.ConnectionString = connectionString;
             })
-            .ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000)
+            .ConfigureEndpoints(siloPort: 11111, gatewayPort: 30001)
             .ConfigureLogging(builder => builder.SetMinimumLevel(LogLevel.Debug).AddConsole());
 
             if (isKubernetesHosting)

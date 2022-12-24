@@ -1,6 +1,3 @@
-using Microsoft.Extensions.Hosting;
-using Orleans.Serialization;
-
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 try
@@ -33,7 +30,7 @@ try
                 options.Invariant = Constants.Invariant;
                 options.ConnectionString = connectionString;
             })
-            .ConfigureEndpoints(siloPort: 21111, gatewayPort: 40000)
+            .ConfigureEndpoints(siloPort: 11112, gatewayPort: 30002)
             .ConfigureLogging(builder => builder.SetMinimumLevel(LogLevel.Debug).AddConsole());
 
             if (isKubernetesHosting)

@@ -6,7 +6,7 @@ networks:
 
 services:   
   selfhosted:
-    image: ${DOCKER_REGISTRY-}server
+    image: ${DOCKER_REGISTRY-}selfhosted
     build:
       context: .
       dockerfile: SelfHosted/Dockerfile    
@@ -15,14 +15,14 @@ services:
     restart: on-failure
     ports:
       - "11111:11111"
-      - "30000:30000"
+      - "30001:30001"
     networks:
      grains-backend:
       aliases:
       - selfhosted  
     
   cohosted:
-    image: ${DOCKER_REGISTRY-}client
+    image: ${DOCKER_REGISTRY-}cohosted
     build:
       context: .
       dockerfile: CoHosted/Dockerfile
@@ -33,7 +33,7 @@ services:
     restart: on-failure
     ports:
       - "5001:80"
-      - "21111:21111"
-      - "40000:40000"
+      - "11112:11112"
+      - "30002:30002"
     networks:
       - grains-backend      
