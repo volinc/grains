@@ -22,6 +22,4 @@ services:
     ports:
       - "9432:5432"
     networks:
-     grains-backend:
-      aliases:
-        - grains-sql
+      - grains-backend
