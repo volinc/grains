@@ -70,17 +70,15 @@ spec:
               name: 11112tcp2
               protocol: TCP
           readinessProbe:
-            failureThreshold: 30
+            failureThreshold: 3
             httpGet:
               path: /health
               port: 5001
               scheme: HTTP
             initialDelaySeconds: 10
-            periodSeconds: 3
+            periodSeconds: 2
             successThreshold: 2
-            tcpSocket:
-              port: 30001
-            timeoutSeconds: 15
+            timeoutSeconds: 2
           resources: { }
           securityContext:
             allowPrivilegeEscalation: false
