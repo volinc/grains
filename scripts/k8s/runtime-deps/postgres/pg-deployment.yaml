@@ -25,7 +25,7 @@ spec:
                   - key: kubernetes.io/hostname
                     operator: In
                     values:
-                      - grains
+                      - docker-desktop
       containers:
         - name: postgres
           args: ["-c", "shared_buffers=3GB", "-c", "max_connections=1000"]
