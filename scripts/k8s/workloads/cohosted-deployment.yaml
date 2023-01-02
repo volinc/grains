@@ -53,21 +53,21 @@ spec:
                 name: general
             - configMapRef:
                 name: cohosted
-          image: image/image
+          image: volinc/grains:cohosted
           imagePullPolicy: IfNotPresent
           name: cohosted
           args:
             - dotnet
             - "CoHosted/CoHosted.dll"
           ports:
-            - containerPort: 5001
-              name: 5001tcp
+            - containerPort: 11112
+              name: 11112tcp0
               protocol: TCP
             - containerPort: 30002
-              name: 30002tcp2
+              name: 30002tcp1
               protocol: TCP
-            - containerPort: 11112
-              name: 11112tcp2
+            - containerPort: 5001
+              name: 5001tcp2
               protocol: TCP
           readinessProbe:
             failureThreshold: 3
@@ -91,8 +91,6 @@ spec:
           terminationMessagePolicy: File
           tty: true
       dnsPolicy: ClusterFirst
-      imagePullSecrets:
-        - name: ???
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: { }
@@ -105,18 +103,18 @@ metadata:
   namespace: grains
 spec:
   ports:
-    - name: 5001tcp2-cohosted
-      port: 5001
-      protocol: TCP
-      targetPort: 5001
-    - name: 30002tcp2-selfthosted
-      port: 30002
-      protocol: TCP
-      targetPort: 30002
-    - name: 11112tcp2-cohosted
+    - name: 11112tcp0
       port: 11112
       protocol: TCP
       targetPort: 11112
+    - name: 30002tcp1
+      port: 30002
+      protocol: TCP
+      targetPort: 30002
+    - name: 5001tcp2
+      port: 5001
+      protocol: TCP
+      targetPort: 5001
   selector:
     app: cohosted
   sessionAffinity: None

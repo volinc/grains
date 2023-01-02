@@ -14,3 +14,9 @@ Start from VS or `docker-compose up --build`
 
 `docker `
 `docker network rm grains-backend`
+
+## K8s
+
+ `docker build -t volinc/grains:selfhosted -f ./SelfHosted/Dockerfile .`
+ `docker build -t volinc/grains:cohosted -f ./CoHosted/Dockerfile .`
+ 

@@ -35,8 +35,6 @@ public class SearchGrain : Grain, ISearchGrain, IRemindable
 
             // https://andrewlock.net/deploying-asp-net-core-applications-to-kubernetes-part-11-avoiding-downtime-in-rolling-deployments-by-blocking-sigterm/
             _logger.LogInformation("SIGTERM received, waiting for 29 seconds");
-            Thread.Sleep(29000);
-            _logger.LogInformation("Termination delay complete, continuing stopping process");
         });
         _logger.LogInformation($"### Search {_key} activated");
         return Task.CompletedTask;

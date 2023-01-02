@@ -1,0 +1,5 @@
+{
+    "yaml.schemas": {
+        "kubernetes://schema/v1%40service": "file:///Users/vol.inc/Projects/Own/Grains/scripts/k8s/workloads/selfhosted-deployment.yaml"
+    }
+}

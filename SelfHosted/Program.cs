@@ -1,3 +1,5 @@
+using System.Net.Sockets;
+
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 try
@@ -30,7 +32,7 @@ try
                 options.Invariant = Constants.Invariant;
                 options.ConnectionString = connectionString;
             })
-            .ConfigureEndpoints(hostname: "selfhosted", siloPort: 11111, gatewayPort: 30001)
+            .ConfigureEndpoints(hostname: "selfhosted", siloPort: 11111, gatewayPort: 30001, listenOnAnyHostAddress: true)
             .ConfigureLogging(builder => builder.SetMinimumLevel(LogLevel.Information).AddConsole());
 
             if (isKubernetesHosting)

@@ -1,0 +1,11 @@
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
+COPY ./nuget.config .
+
+COPY ["Grains.Interfaces/*.csproj", "Grains.Interfaces/"]
+COPY ["Grains/*.csproj", "Grains/"]
+COPY ["SelfHosted/*.csproj", "SelfHosted/"]
+COPY ["CoHosted/*.csproj", "CoHosted/"]
+
+RUN ls -a
+RUN find . -type f -name "*.csproj" -exec dotnet restore "{}" \;

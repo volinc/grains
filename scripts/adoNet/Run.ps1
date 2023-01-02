@@ -1,4 +1,4 @@
-$coonection_string = "postgresql://postgres:pass@localhost:9432/grains"
+$coonection_string = "postgresql://postgres:pass@localhost:30008/grains"
 
 function run($file) {
     psql -f $file -w ${coonection_string}
