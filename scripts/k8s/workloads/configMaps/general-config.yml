@@ -5,6 +5,6 @@ metadata:
   namespace: grains
 data:
   ORLEANS_IS_KUBERNETES_HOSTING: 'false'
-  CUSTOMCONNSTR_CLUSTERING: 'Server=sql;Database=grains;Username=postgres;Password=pass;'
+  CUSTOMCONNSTR_CLUSTERING: 'Server=postgres.grains.svc.cluster.local;Database=grains;Username=postgres;Password=pass;'
   ORLEANS_CLUSTER_ID: 'grains'
   IS_KUBERNETES_ORLEANS_HOSTING: 'true'

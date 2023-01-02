@@ -28,7 +28,7 @@ spec:
                       - docker-desktop
       containers:
         - name: postgres
-          args: ["-c", "shared_buffers=3GB", "-c", "max_connections=1000"]
+          args: ["-c", "shared_buffers=1GB", "-c", "max_connections=300"]
           env:
             - name: POSTGRES_DB
               value: grains
@@ -62,3 +62,18 @@ spec:
           emptyDir:
             medium: Memory
             sizeLimit: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: grains
+  labels:
+    app: postgres
+  name: postgres
+spec:
+  selector:
+    app: postgres
+  ports:
+    - name: "5432"
+      port: 5432
+      targetPort: 5432

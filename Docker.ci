@@ -1,0 +1,15 @@
+FROM volinc/grains:base AS build
+WORKDIR /src
+COPY . .
+RUN dotnet build "Grains.sln" -c Release
+
+ENV MS="SelfHosted CoHosted"
+RUN mkdir /app
+RUN for i in $MS; do cd $i && dotnet publish $i.csproj -c Release -o /app/$i && cd ..; done
+
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS final
+
+WORKDIR /app
+COPY --from=build /app /app
+
+CMD dotnet
