@@ -1,5 +1,6 @@
 namespace Grains;
 
+[FixedPlacementStrategy]
 public class SearchGrain : Grain, ISearchGrain, IRemindable
 {
     private const string ReminderName = "search";
@@ -126,8 +127,13 @@ public class SearchGrain : Grain, ISearchGrain, IRemindable
     private async Task LoopSearchAsync(Action<TimeSpan> loop)
     {
         await Task.Delay(500);
+
+        if (!State.IsStarted)
+            return;
+
         State.Value += 1;
         await Console.Out.WriteLineAsync($"Value = {State.Value}");
+
         loop(TimeSpan.FromSeconds(10));
     }
 

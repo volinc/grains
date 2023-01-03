@@ -1,10 +1,17 @@
 using System.Net.Sockets;
+using Orleans.Runtime;
+using Orleans.Runtime.Placement;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 try
 {
     var host = Host.CreateDefaultBuilder(args)
+        .ConfigureServices(services =>
+        {
+            services.AddSingletonNamedService<PlacementStrategy, FixedPlacementStrategy>(nameof(FixedPlacementStrategy));
+            services.AddSingletonKeyedService<Type, IPlacementDirector, FixedPlacementDirector>(typeof(FixedPlacementStrategy));
+        })
         .UseOrleans((context, siloBuilder) =>
         {
             var clusterId = context.Configuration.GetValue<string>(Constants.ClusterIdKey);
