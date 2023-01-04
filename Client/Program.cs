@@ -1,16 +1,22 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using Grains.Interfaces;
+using Orleans.Configuration;
 
-// Add services to the container.
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-builder.Services.AddControllers();
+try
+{ 
+    var host = Host.CreateDefaultBuilder(args)
+        .ConfigureWebHostDefaults(webBuilder =>
+        {
+            webBuilder.UseStartup<Startup>();
+        })
+        .Build();
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
-
+    await Task.Delay(15000);
+    await host.RunAsync();
+}
+catch (Exception exception)
+{
+    Console.WriteLine(exception);
+    throw;
+}

@@ -55,34 +55,4 @@ public class OrdersController : ControllerBase
         var order = _clusterClient.GetGrain<ICustomerGrain>(customerId);
         return await order.GetSearchValueAsync(orderId);
     }
-
-    //[HttpPost("{id}/cancel")]
-    //public async Task CancelAsync(string id)
-    //{
-    //    var order = _clusterClient.GetGrain<IOrderGrain>(id);
-    //    await order.StopSearchAsync();
-    //}
-
-    //[HttpPost("{id}/stop-process")]
-    //public Task StopProcessAsync(string id)
-    //{
-    //    var order = _clusterClient.GetGrain<IOrderGrain>(id);
-    //    order.StopProcessAsync().Ignore();
-    //    return Task.CompletedTask;
-    //}
-
-    //[HttpPost("{id}/check")]
-    //public async Task CheckExceptionSerializationAsync(Guid id)
-    //{
-    //    try
-    //    {
-    //        var order = clusterClient.GetGrain<IOrderGrain>(id);
-    //        await order.CheckExceptionSerializationAsync();
-    //    }
-    //    catch (Exception exception)
-    //    {
-    //        Debug.WriteLine(exception);
-    //        throw;
-    //    }
-    //}
 }
