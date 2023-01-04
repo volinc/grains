@@ -31,10 +31,10 @@ public class Startup
         services.AddOrleansClient(builder =>
         {
             builder.Configure<ClusterOptions>(options =>
-             {
-                 options.ClusterId = clusterId;
-                 options.ServiceId = serviceId;
-             })
+            {
+                options.ClusterId = clusterId;
+                options.ServiceId = serviceId;
+            })
             .UseAdoNetClustering(options =>
             {
                 options.Invariant = Constants.Invariant;
