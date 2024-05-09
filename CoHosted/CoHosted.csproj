@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="7.0.0" />
     <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="7.0.0" />
     <PackageReference Include="Microsoft.Orleans.Reminders.AdoNet" Version="7.0.0" />
-    <PackageReference Include="Npgsql" Version="7.0.1" />
+    <PackageReference Include="Npgsql" Version="8.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Grains.Interfaces\Grains.Interfaces.csproj">
