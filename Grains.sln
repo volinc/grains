@@ -3,17 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfHosted", "SelfHosted\SelfHosted.csproj", "{8833CADE-80B5-4AA1-835E-594E907C58DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grains.Silo", "Grains.Silo\Grains.Silo.csproj", "{8833CADE-80B5-4AA1-835E-594E907C58DF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grains.Interfaces", "Grains.Interfaces\Grains.Interfaces.csproj", "{1977C291-BE23-415A-8305-9E6F7B23203D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grains.Api", "Grains.Api\Grains.Api.csproj", "{5B799025-2168-4132-9C9D-4F41B40F449C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grains", "Grains\Grains.csproj", "{C8097F83-2D0E-4FFD-AEAE-AA075141289C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grains.AppHost", "Grains.AppHost\Grains.AppHost.csproj", "{9BF1E233-B0E4-4539-B2AA-F5602ABA22E4}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{537FB303-CF81-4D7D-B222-934A130B0335}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoHosted", "CoHosted\CoHosted.csproj", "{46BFCFEB-A1EF-45B1-90DC-96C1D16A2B92}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{5B799025-2168-4132-9C9D-4F41B40F449C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grains.Shared", "Grains.Shared\Grains.Shared.csproj", "{5DEB9A53-F827-442D-AF26-9CE48CD9C16D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,31 +21,25 @@ Global
 		{8833CADE-80B5-4AA1-835E-594E907C58DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8833CADE-80B5-4AA1-835E-594E907C58DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8833CADE-80B5-4AA1-835E-594E907C58DF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1977C291-BE23-415A-8305-9E6F7B23203D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1977C291-BE23-415A-8305-9E6F7B23203D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1977C291-BE23-415A-8305-9E6F7B23203D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1977C291-BE23-415A-8305-9E6F7B23203D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C8097F83-2D0E-4FFD-AEAE-AA075141289C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C8097F83-2D0E-4FFD-AEAE-AA075141289C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C8097F83-2D0E-4FFD-AEAE-AA075141289C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C8097F83-2D0E-4FFD-AEAE-AA075141289C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{537FB303-CF81-4D7D-B222-934A130B0335}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{537FB303-CF81-4D7D-B222-934A130B0335}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{537FB303-CF81-4D7D-B222-934A130B0335}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{537FB303-CF81-4D7D-B222-934A130B0335}.Release|Any CPU.Build.0 = Release|Any CPU
-		{46BFCFEB-A1EF-45B1-90DC-96C1D16A2B92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{46BFCFEB-A1EF-45B1-90DC-96C1D16A2B92}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{46BFCFEB-A1EF-45B1-90DC-96C1D16A2B92}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{46BFCFEB-A1EF-45B1-90DC-96C1D16A2B92}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5B799025-2168-4132-9C9D-4F41B40F449C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5B799025-2168-4132-9C9D-4F41B40F449C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B799025-2168-4132-9C9D-4F41B40F449C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B799025-2168-4132-9C9D-4F41B40F449C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BF1E233-B0E4-4539-B2AA-F5602ABA22E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BF1E233-B0E4-4539-B2AA-F5602ABA22E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BF1E233-B0E4-4539-B2AA-F5602ABA22E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BF1E233-B0E4-4539-B2AA-F5602ABA22E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DEB9A53-F827-442D-AF26-9CE48CD9C16D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DEB9A53-F827-442D-AF26-9CE48CD9C16D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DEB9A53-F827-442D-AF26-9CE48CD9C16D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DEB9A53-F827-442D-AF26-9CE48CD9C16D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {770CE15D-FCF4-4F37-BBC3-B62DEEFFB973}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 EndGlobal

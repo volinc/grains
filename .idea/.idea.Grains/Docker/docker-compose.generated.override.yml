@@ -1,0 +1,39 @@
+# This is a generated file. Not intended for manual editing.
+version: "3.8"
+services:
+  client:
+    build:
+      context: "/Users/vol.inc/Projects/Own/grains"
+      dockerfile: "Grains.Api/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/Grains.Api.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "client:dev"
+    ports: []
+    volumes:
+    - "/Users/vol.inc/Projects/Own/grains/Grains.Api:/app:rw"
+    - "/Users/vol.inc/Projects/Own/grains:/src:rw"
+    - "/Users/vol.inc/.nuget/packages:/root/.nuget/packages"
+    working_dir: "/app"
+  selfhosted:
+    build:
+      context: "/Users/vol.inc/Projects/Own/grains"
+      dockerfile: "Grains.Silo/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/Grains.Silo.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "selfhosted:dev"
+    ports: []
+    volumes:
+    - "/Users/vol.inc/Projects/Own/grains/Grains.Silo:/app:rw"
+    - "/Users/vol.inc/Projects/Own/grains:/src:rw"
+    - "/Users/vol.inc/.nuget/packages:/root/.nuget/packages"
+    working_dir: "/app"
